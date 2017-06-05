@@ -1,0 +1,377 @@
+# //  Questa Sim-64
+# //  Version 10.6a win64 Mar 16 2017
+# //
+# //  Copyright 1991-2017 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# do run_win.do
+# QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+# Start time: 22:03:15 on May 09,2017
+# vlog -reportprogress 300 -mfcu "+incdir+../dv" "+define+QUESTA" ../dv/pipe_pkg.svh ../interface/pipe_if.sv ../dv/tb.sv ../design/pipe.sv 
+# -- Compiling package pipe_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) ../dv/pipe_pkg.svh(6): Using implicit +incdir+C:/questasim64_10.6a/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at ../dv/pipe_pkg.svh(8)
+# ** at ../dv/data_packet.sv(32): (vlog-2269) Unterminated string literal continues onto next line 32.
+# ** Warning: ** while parsing file included at ../dv/pipe_pkg.svh(8)
+# ** while parsing macro expansion: 'uvm_info' starting at ../dv/data_packet.sv(32)
+# ** at ../dv/data_packet.sv(35): (vlog-2643) Unterminated string literal continues onto next line.
+# -- Compiling interface pipe_if
+# -- Compiling module tb
+# -- Importing package pipe_pkg
+# -- Compiling module pipe
+# 
+# Top level modules:
+# 	tb
+# End time: 22:03:16 on May 09,2017, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 2
+# vsim -c tb -classdebug -uvmcontrol=all "+UVM_TESTNAME=random_test" 
+# Start time: 22:03:16 on May 09,2017
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.pipe_if(fast)
+# Loading mtiUvm.uvm_pkg
+# Loading work.pipe_pkg(fast)
+# Loading work.tb(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading C:/questasim64_10.6a/uvm-1.1d\win64\uvm_dpi.dll
+run
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(215) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(217) @ 0: reporter [Questa UVM]  questa_uvm::init(all)
+# UVM_INFO @ 0: reporter [RNTST] Running test random_test...
+# UVM_INFO ../dv/test_lib.sv(45) @ 0: uvm_test_top [uvm_test_top] Build stage complete.
+# UVM_INFO ../dv/dut_env.sv(34) @ 0: uvm_test_top.env [uvm_test_top.env] Build stage complete.
+# UVM_INFO ../dv/pipe_env.sv(25) @ 0: uvm_test_top.env.penv_in [uvm_test_top.env.penv_in] Build stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(34) @ 0: uvm_test_top.env.penv_in.agent [uvm_test_top.env.penv_in.agent] Build stage compete.
+# UVM_INFO ../dv/pipe_driver.sv(20) @ 0: uvm_test_top.env.penv_in.agent.driver [uvm_test_top.env.penv_in.agent.driver] Build stage complete.
+# UVM_INFO ../dv/pipe_monitor.sv(28) @ 0: uvm_test_top.env.penv_in.agent.monitor [pipe_monitor] INTERFACE USED = in_intf
+# UVM_INFO ../dv/pipe_monitor.sv(38) @ 0: uvm_test_top.env.penv_in.agent.monitor [uvm_test_top.env.penv_in.agent.monitor] Build stage complete.
+# UVM_INFO ../dv/pipe_env.sv(25) @ 0: uvm_test_top.env.penv_out [uvm_test_top.env.penv_out] Build stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(34) @ 0: uvm_test_top.env.penv_out.agent [uvm_test_top.env.penv_out.agent] Build stage compete.
+# UVM_INFO ../dv/pipe_monitor.sv(28) @ 0: uvm_test_top.env.penv_out.agent.monitor [pipe_monitor] INTERFACE USED = out_intf
+# UVM_INFO ../dv/pipe_monitor.sv(38) @ 0: uvm_test_top.env.penv_out.agent.monitor [uvm_test_top.env.penv_out.agent.monitor] Build stage complete.
+# UVM_INFO ../dv/pipe_scoreboard.sv(30) @ 0: uvm_test_top.env.sb [uvm_test_top.env.sb] Build stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(41) @ 0: uvm_test_top.env.penv_in.agent [uvm_test_top.env.penv_in.agent] Connect stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(41) @ 0: uvm_test_top.env.penv_out.agent [uvm_test_top.env.penv_out.agent] Connect stage complete.
+# UVM_INFO ../dv/dut_env.sv(41) @ 0: uvm_test_top.env [uvm_test_top.env] Build stage complete.
+# UVM_INFO ../dv/test_lib.sv(27) @ 0: uvm_test_top [random_test] Printing the test topology :
+# -----------------------------------------------------------------------------
+# Name                            Type                        Size  Value      
+# -----------------------------------------------------------------------------
+# uvm_test_top                    random_test                 -     @473       
+#   env                           dut_env                     -     @480       
+#     penv_in                     pipe_env                    -     @496       
+#       agent                     pipe_agent                  -     @517       
+#         driver                  pipe_driver                 -     @637       
+#           rsp_port              uvm_analysis_port           -     @652       
+#           seq_item_port         uvm_seq_item_pull_port      -     @644       
+#           recording_detail      integral                    32    'd1        
+#         monitor                 pipe_monitor                -     @660       
+#           item_collected_port   uvm_analysis_port           -     @670       
+#           recording_detail      integral                    32    'd1        
+#         sequencer               pipe_sequencer              -     @528       
+#           rsp_export            uvm_analysis_export         -     @535       
+#           seq_item_export       uvm_seq_item_pull_imp       -     @629       
+#           recording_detail      integral                    32    'd1        
+#           arbitration_queue     array                       0     -          
+#           lock_queue            array                       0     -          
+#           num_last_reqs         integral                    32    'd1        
+#           num_last_rsps         integral                    32    'd1        
+#         is_active               uvm_active_passive_enum     1     UVM_ACTIVE 
+#         recording_detail        integral                    32    'd1        
+#       recording_detail          integral                    32    'd1        
+#     penv_out                    pipe_env                    -     @503       
+#       agent                     pipe_agent                  -     @691       
+#         monitor                 pipe_monitor                -     @702       
+#           item_collected_port   uvm_analysis_port           -     @711       
+#           recording_detail      integral                    32    'd1        
+#         is_active               uvm_active_passive_enum     1     UVM_PASSIVE
+#         recording_detail        integral                    32    'd1        
+#       recording_detail          integral                    32    'd1        
+#     sb                          pipe_scoreboard             -     @510       
+#       input_packets_collected   uvm_tlm_analysis_fifo #(T)  -     @727       
+#         analysis_export         uvm_analysis_imp            -     @766       
+#           recording_detail      integral                    32    'd1        
+#         get_ap                  uvm_analysis_port           -     @758       
+#           recording_detail      integral                    32    'd1        
+#         get_peek_export         uvm_get_peek_imp            -     @742       
+#           recording_detail      integral                    32    'd1        
+#         put_ap                  uvm_analysis_port           -     @750       
+#           recording_detail      integral                    32    'd1        
+#         put_export              uvm_put_imp                 -     @734       
+#           recording_detail      integral                    32    'd1        
+#         recording_detail        integral                    32    'd1        
+#       output_packets_collected  uvm_tlm_analysis_fifo #(T)  -     @774       
+#         analysis_export         uvm_analysis_imp            -     @813       
+#           recording_detail      integral                    32    'd1        
+#         get_ap                  uvm_analysis_port           -     @805       
+#           recording_detail      integral                    32    'd1        
+#         get_peek_export         uvm_get_peek_imp            -     @789       
+#           recording_detail      integral                    32    'd1        
+#         put_ap                  uvm_analysis_port           -     @797       
+#           recording_detail      integral                    32    'd1        
+#         put_export              uvm_put_imp                 -     @781       
+#           recording_detail      integral                    32    'd1        
+#         recording_detail        integral                    32    'd1        
+#       recording_detail          integral                    32    'd1        
+#     recording_detail            integral                    32    'd1        
+#   recording_detail              integral                    32    'd1        
+# -----------------------------------------------------------------------------
+# 
+# **************************************************************************
+# * Questa UVM Transaction Recording Turned ON.                            *
+# * recording_detail has been set.                                         *
+# *  To turn off, set 'recording_detail' to off:                           *
+# * uvm_config_db#(int)            ::set(null, "", "recording_detail", 0); *
+# * uvm_config_db#(uvm_bitstream_t)::set(null, "", "recording_detail", 0); *
+# **************************************************************************
+vsim -do run_win.do
+# No design specified
+do run_win.do
+# QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+# Start time: 22:04:55 on May 09,2017
+# vlog -reportprogress 300 -mfcu "+incdir+../dv" "+define+QUESTA" ../dv/pipe_pkg.svh ../interface/pipe_if.sv ../dv/tb.sv ../design/pipe.sv 
+# -- Compiling package pipe_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) ../dv/pipe_pkg.svh(6): Using implicit +incdir+C:/questasim64_10.6a/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at ../dv/pipe_pkg.svh(8)
+# ** at ../dv/data_packet.sv(32): (vlog-2269) Unterminated string literal continues onto next line 32.
+# ** Warning: ** while parsing file included at ../dv/pipe_pkg.svh(8)
+# ** while parsing macro expansion: 'uvm_info' starting at ../dv/data_packet.sv(32)
+# ** at ../dv/data_packet.sv(35): (vlog-2643) Unterminated string literal continues onto next line.
+# -- Compiling interface pipe_if
+# -- Compiling module tb
+# -- Importing package pipe_pkg
+# -- Compiling module pipe
+# 
+# Top level modules:
+# 	tb
+# End time: 22:04:56 on May 09,2017, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 2
+# End time: 22:04:57 on May 09,2017, Elapsed time: 0:01:41
+# Errors: 0, Warnings: 2
+# vsim -c tb -classdebug -uvmcontrol=all "+UVM_TESTNAME=random_test" 
+# Start time: 22:04:57 on May 09,2017
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading sv_std.std
+# Loading work.pipe_if(fast)
+# Loading mtiUvm.uvm_pkg
+# Loading work.pipe_pkg(fast)
+# Loading work.tb(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading C:/questasim64_10.6a/uvm-1.1d\win64\uvm_dpi.dll
+run
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(215) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(217) @ 0: reporter [Questa UVM]  questa_uvm::init(all)
+# UVM_INFO @ 0: reporter [RNTST] Running test random_test...
+# UVM_INFO ../dv/test_lib.sv(45) @ 0: uvm_test_top [uvm_test_top] Build stage complete.
+# UVM_INFO ../dv/dut_env.sv(34) @ 0: uvm_test_top.env [uvm_test_top.env] Build stage complete.
+# UVM_INFO ../dv/pipe_scoreboard.sv(30) @ 0: uvm_test_top.env.sb [uvm_test_top.env.sb] Build stage complete.
+# ** Fatal: (SIGSEGV) Bad handle or reference.
+#    Time: 0 ns  Iteration: 15  Process: /uvm_pkg::uvm_phase::m_run_phases/#FORK#1847_ff832bc6 File: C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_common_phases.svh
+# Fatal error in Function pipe_pkg/dut_env::connect_phase at ../dv/dut_env.sv line 38
+# 
+# HDL call sequence:
+# Stopped at ../dv/dut_env.sv 38 Function pipe_pkg/dut_env::connect_phase
+# called from  C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_common_phases.svh 96 Function uvm_pkg/uvm_connect_phase::exec_func
+# called from  C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_bottomup_phase.svh 108 Function uvm_pkg/uvm_bottomup_phase::execute
+# called from  C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_bottomup_phase.svh 81 Function uvm_pkg/uvm_bottomup_phase::traverse
+# called from  C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_bottomup_phase.svh 61 Function uvm_pkg/uvm_bottomup_phase::traverse
+# called from  C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_bottomup_phase.svh 61 Function uvm_pkg/uvm_bottomup_phase::traverse
+# called from  C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_phase.svh 1156 Task uvm_pkg/uvm_phase::execute_phase
+# called from  C:/questasim64_10.6a/win64/../verilog_src/uvm-1.1d/src/base/uvm_phase.svh 1847 Task uvm_pkg/uvm_phase::m_run_phases
+# 
+do run_win.do
+# QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
+# Start time: 22:16:40 on May 09,2017
+# vlog -reportprogress 300 -mfcu "+incdir+../dv" "+define+QUESTA" ../dv/pipe_pkg.svh ../interface/pipe_if.sv ../dv/tb.sv ../design/pipe.sv 
+# -- Compiling package pipe_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) ../dv/pipe_pkg.svh(6): Using implicit +incdir+C:/questasim64_10.6a/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# ** Warning: ** while parsing file included at ../dv/pipe_pkg.svh(8)
+# ** at ../dv/data_packet.sv(32): (vlog-2269) Unterminated string literal continues onto next line 32.
+# ** Warning: ** while parsing file included at ../dv/pipe_pkg.svh(8)
+# ** while parsing macro expansion: 'uvm_info' starting at ../dv/data_packet.sv(32)
+# ** at ../dv/data_packet.sv(35): (vlog-2643) Unterminated string literal continues onto next line.
+# -- Compiling interface pipe_if
+# -- Compiling module tb
+# -- Importing package pipe_pkg
+# -- Compiling module pipe
+# 
+# Top level modules:
+# 	tb
+# End time: 22:16:40 on May 09,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 2
+# End time: 22:16:41 on May 09,2017, Elapsed time: 0:11:44
+# Errors: 2, Warnings: 2
+# vsim -c tb -classdebug -uvmcontrol=all "+UVM_TESTNAME=random_test" 
+# Start time: 22:16:41 on May 09,2017
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading sv_std.std
+# Loading work.pipe_if(fast)
+# Loading mtiUvm.uvm_pkg
+# Loading work.pipe_pkg(fast)
+# Loading work.tb(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading C:/questasim64_10.6a/uvm-1.1d\win64\uvm_dpi.dll
+run
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(215) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(217) @ 0: reporter [Questa UVM]  questa_uvm::init(all)
+# UVM_INFO @ 0: reporter [RNTST] Running test random_test...
+# UVM_INFO ../dv/test_lib.sv(45) @ 0: uvm_test_top [uvm_test_top] Build stage complete.
+# UVM_INFO ../dv/dut_env.sv(34) @ 0: uvm_test_top.env [uvm_test_top.env] Build stage complete.
+# UVM_INFO ../dv/pipe_env.sv(25) @ 0: uvm_test_top.env.penv_in [uvm_test_top.env.penv_in] Build stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(34) @ 0: uvm_test_top.env.penv_in.agent [uvm_test_top.env.penv_in.agent] Build stage compete.
+# UVM_INFO ../dv/pipe_driver.sv(20) @ 0: uvm_test_top.env.penv_in.agent.driver [uvm_test_top.env.penv_in.agent.driver] Build stage complete.
+# UVM_INFO ../dv/pipe_monitor.sv(28) @ 0: uvm_test_top.env.penv_in.agent.monitor [pipe_monitor] INTERFACE USED = in_intf
+# UVM_INFO ../dv/pipe_monitor.sv(38) @ 0: uvm_test_top.env.penv_in.agent.monitor [uvm_test_top.env.penv_in.agent.monitor] Build stage complete.
+# UVM_INFO ../dv/pipe_env.sv(25) @ 0: uvm_test_top.env.penv_out [uvm_test_top.env.penv_out] Build stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(34) @ 0: uvm_test_top.env.penv_out.agent [uvm_test_top.env.penv_out.agent] Build stage compete.
+# UVM_INFO ../dv/pipe_monitor.sv(28) @ 0: uvm_test_top.env.penv_out.agent.monitor [pipe_monitor] INTERFACE USED = out_intf
+# UVM_INFO ../dv/pipe_monitor.sv(38) @ 0: uvm_test_top.env.penv_out.agent.monitor [uvm_test_top.env.penv_out.agent.monitor] Build stage complete.
+# UVM_INFO ../dv/pipe_scoreboard.sv(30) @ 0: uvm_test_top.env.sb [uvm_test_top.env.sb] Build stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(41) @ 0: uvm_test_top.env.penv_in.agent [uvm_test_top.env.penv_in.agent] Connect stage complete.
+# UVM_INFO ../dv/pipe_agent.sv(41) @ 0: uvm_test_top.env.penv_out.agent [uvm_test_top.env.penv_out.agent] Connect stage complete.
+# UVM_INFO ../dv/dut_env.sv(41) @ 0: uvm_test_top.env [uvm_test_top.env] Build stage complete.
+# UVM_INFO ../dv/test_lib.sv(27) @ 0: uvm_test_top [random_test] Printing the test topology :
+# -----------------------------------------------------------------------------
+# Name                            Type                        Size  Value      
+# -----------------------------------------------------------------------------
+# uvm_test_top                    random_test                 -     @473       
+#   env                           dut_env                     -     @480       
+#     penv_in                     pipe_env                    -     @496       
+#       agent                     pipe_agent                  -     @517       
+#         driver                  pipe_driver                 -     @637       
+#           rsp_port              uvm_analysis_port           -     @652       
+#           seq_item_port         uvm_seq_item_pull_port      -     @644       
+#           recording_detail      integral                    32    'd1        
+#         monitor                 pipe_monitor                -     @660       
+#           item_collected_port   uvm_analysis_port           -     @670       
+#           recording_detail      integral                    32    'd1        
+#         sequencer               pipe_sequencer              -     @528       
+#           rsp_export            uvm_analysis_export         -     @535       
+#           seq_item_export       uvm_seq_item_pull_imp       -     @629       
+#           recording_detail      integral                    32    'd1        
+#           arbitration_queue     array                       0     -          
+#           lock_queue            array                       0     -          
+#           num_last_reqs         integral                    32    'd1        
+#           num_last_rsps         integral                    32    'd1        
+#         is_active               uvm_active_passive_enum     1     UVM_ACTIVE 
+#         recording_detail        integral                    32    'd1        
+#       recording_detail          integral                    32    'd1        
+#     penv_out                    pipe_env                    -     @503       
+#       agent                     pipe_agent                  -     @691       
+#         monitor                 pipe_monitor                -     @702       
+#           item_collected_port   uvm_analysis_port           -     @711       
+#           recording_detail      integral                    32    'd1        
+#         is_active               uvm_active_passive_enum     1     UVM_PASSIVE
+#         recording_detail        integral                    32    'd1        
+#       recording_detail          integral                    32    'd1        
+#     sb                          pipe_scoreboard             -     @510       
+#       input_packets_collected   uvm_tlm_analysis_fifo #(T)  -     @727       
+#         analysis_export         uvm_analysis_imp            -     @766       
+#           recording_detail      integral                    32    'd1        
+#         get_ap                  uvm_analysis_port           -     @758       
+#           recording_detail      integral                    32    'd1        
+#         get_peek_export         uvm_get_peek_imp            -     @742       
+#           recording_detail      integral                    32    'd1        
+#         put_ap                  uvm_analysis_port           -     @750       
+#           recording_detail      integral                    32    'd1        
+#         put_export              uvm_put_imp                 -     @734       
+#           recording_detail      integral                    32    'd1        
+#         recording_detail        integral                    32    'd1        
+#       output_packets_collected  uvm_tlm_analysis_fifo #(T)  -     @774       
+#         analysis_export         uvm_analysis_imp            -     @813       
+#           recording_detail      integral                    32    'd1        
+#         get_ap                  uvm_analysis_port           -     @805       
+#           recording_detail      integral                    32    'd1        
+#         get_peek_export         uvm_get_peek_imp            -     @789       
+#           recording_detail      integral                    32    'd1        
+#         put_ap                  uvm_analysis_port           -     @797       
+#           recording_detail      integral                    32    'd1        
+#         put_export              uvm_put_imp                 -     @781       
+#           recording_detail      integral                    32    'd1        
+#         recording_detail        integral                    32    'd1        
+#       recording_detail          integral                    32    'd1        
+#     recording_detail            integral                    32    'd1        
+#   recording_detail              integral                    32    'd1        
+# -----------------------------------------------------------------------------
+# 
+# **************************************************************************
+# * Questa UVM Transaction Recording Turned ON.                            *
+# * recording_detail has been set.                                         *
+# *  To turn off, set 'recording_detail' to off:                           *
+# * uvm_config_db#(int)            ::set(null, "", "recording_detail", 0); *
+# * uvm_config_db#(uvm_bitstream_t)::set(null, "", "recording_detail", 0); *
+# **************************************************************************
+add wave -position end sim:/uvm_root/uvm_test_top/env/penv_out/agent/*
+# End time: 06:57:52 on May 10,2017, Elapsed time: 8:41:11
+# Errors: 0, Warnings: 0
