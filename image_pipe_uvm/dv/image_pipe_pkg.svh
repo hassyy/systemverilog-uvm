@@ -7,6 +7,7 @@ package image_pipe_pkg;
 
     `include "image_pipe_data.sv"
     `include "image_pipe_driver.sv"
+    `include "image_pipe_busy_driver.sv"
     `include "image_pipe_monitor.sv"
     `include "image_pipe_sequencer.sv"
     `include "image_pipe_agent.sv"

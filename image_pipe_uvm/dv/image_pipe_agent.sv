@@ -4,18 +4,22 @@
 `include "common_header.svh"
 `include "image_pipe_sequencer.sv"
 `include "image_pipe_driver.sv"
+`include "image_pipe_busy_driver.sv"
 `include "image_pipe_monitor.sv"
 
 
 class image_pipe_agent extends uvm_agent;
     protected uvm_active_passive_enum is_active = UVM_ACTIVE;
+    protected uvm_active_passive_enum is_busy_active = UVM_ACTIVE;
 
     image_pipe_sequencer sequencer;
     image_pipe_driver driver;
+    image_pipe_busy_driver busy_driver;
     image_pipe_monitor monitor;
 
     `uvm_component_utils_begin(image_pipe_agent)
         `uvm_field_enum(uvm_active_passive_enum, is_active, UVM_ALL_ON)
+        `uvm_field_enum(uvm_active_passive_enum, is_busy_active, UVM_ALL_ON)
     `uvm_component_utils_end
 
     function new(string name, uvm_component parent);
@@ -27,6 +31,9 @@ class image_pipe_agent extends uvm_agent;
         if (is_active==UVM_ACTIVE) begin
             sequencer = image_pipe_sequencer::type_id::create("sequencer", this);
             driver = image_pipe_driver::type_id::create("driver", this);
+        end
+        if (is_busy_active==UVM_ACTIVE) begin
+            busy_driver = image_pipe_busy_driver::type_id::create("busy_driver", this);
         end
 
         monitor = image_pipe_monitor::type_id::create("monitor", this);
