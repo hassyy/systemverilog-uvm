@@ -27,22 +27,33 @@ module tb;
         , .im_busy_in(ovif.im_busy_in)
     );
 
-    always #5 clk=~clk;
+    // TASKs
+    task clk_gen();
+        clk = 0;
+        forever #(`CLK_PERIOD/2) clk=!clk;
+    endtask
 
-    initial begin
-        #5 rst_n=1'b0;
-        #25 rst_n=1'b1;
-    end
+    task rst_gen();
+        rst_n = `RESET_ACTIVE;
+        repeat(`RESET_CYCLE) @(posedge clk);
+        rst_n <= !`RESET_ACTIVE;
+        forever @(posedge clk);
+    endtask
 
     //assign ovif.enable=ivif.enable;
 
     initial begin
-        // Set vif according to defined interface name (in_intf/out_intf)
-        uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get( ), "*.agent.*", "in_intf", ivif);
-        uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get( ), "*.agent.*", "out_intf", ovif);
-        uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get( ), "*.monitor", "monitor_intf", ovif);
+        fork
+            rst_gen();
+            clk_gen();
 
-        run_test();
+            // UVM config_db setting
+            uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get( ), "*.agent.*", "in_intf", ivif);
+            uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get( ), "*.agent.*", "out_intf", ovif);
+            uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get( ), "*.monitor", "monitor_intf", ovif);
+            // UVM start test.
+            run_test();
+        join_any
     end
 
 endmodule

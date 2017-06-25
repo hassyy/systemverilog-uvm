@@ -5,6 +5,8 @@ package image_pipe_pkg;
     import uvm_pkg::*;
     `include "uvm_macros.svh"
 
+    `include "define.svh"
+
     `include "image_pipe_data.sv"
     `include "image_pipe_driver.sv"
     `include "image_pipe_busy_driver.sv"
@@ -17,6 +19,7 @@ package image_pipe_pkg;
     `include "dut_env.sv"
     `include "image_pipe_sequence_lib.sv"
     `include "test_lib.sv"
+    `include "image_pipe_primary_test.sv"
 
 endpackage
 

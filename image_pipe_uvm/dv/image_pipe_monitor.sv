@@ -5,16 +5,16 @@
 `include "image_pipe_data.sv"
 
 
-class image_pipe_monitor extends uvm_monitor;
+class image_pipe_monitor #(int DW_IN=32, int DW_OUT=32) extends uvm_monitor;
     virtual image_pipe_if vif;
     string monitor_intf;
     int num_data;
 
-    uvm_analysis_port #(image_pipe_data) item_collected_port;
-    image_pipe_data data_collected;
-    image_pipe_data data_clone;
+    uvm_analysis_port #(image_pipe_data#(DW_IN, DW_OUT)) item_collected_port;
+    image_pipe_data #(DW_IN, DW_OUT) data_collected;
+    image_pipe_data #(DW_IN, DW_OUT) data_clone;
 
-    `uvm_component_utils(image_pipe_monitor)
+    `uvm_component_param_utils(image_pipe_monitor#(DW_IN, DW_OUT))
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -31,9 +31,9 @@ class image_pipe_monitor extends uvm_monitor;
             `uvm_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name( ), ".vif"})
 
         item_collected_port = new("item_collected_port", this);
-        data_collected = image_pipe_data::type_id::create("data_collected");
+        data_collected = image_pipe_data#(DW_IN, DW_OUT)::type_id::create("data_collected");
 
-        data_clone = image_pipe_data::type_id::create("data_clone");
+        data_clone = image_pipe_data#(DW_IN, DW_OUT)::type_id::create("data_clone");
 
         `uvm_info(get_full_name( ), "Build stage complete.", UVM_LOW)
     endfunction : build_phase

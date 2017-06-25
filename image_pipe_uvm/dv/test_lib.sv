@@ -33,27 +33,4 @@ class base_test extends uvm_test;
 
 endclass : base_test
 
-class many_random_test extends base_test;
-  `uvm_component_utils(many_random_test)
-
-  function new(string name, uvm_component parent);
-    super.new(name, parent);
-  endfunction : new
-
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-  endfunction : build_phase
-
-  virtual task run_phase(uvm_phase phase);
-    many_random_sequence seq;
-
-    super.run_phase(phase);
-    phase.raise_objection(this);
-    seq = many_random_sequence::type_id::create("seq");
-    assert(seq.randomize());
-    seq.start(env.penv_in.agent.sequencer);
-    phase.drop_objection(this);
-  endtask
-endclass: many_random_test
-
 `endif

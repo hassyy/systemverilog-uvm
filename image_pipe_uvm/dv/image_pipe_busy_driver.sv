@@ -4,10 +4,10 @@
 `include "common_header.svh"
 `include "image_pipe_data.sv"
 
-class image_pipe_busy_driver extends uvm_driver #(image_pipe_data);
+class image_pipe_busy_driver #(int DW_IN, int DW_OUT) extends uvm_driver #(image_pipe_data #(DW_IN, DW_OUT));
     virtual image_pipe_if vif;
 
-    `uvm_component_utils(image_pipe_busy_driver)
+    `uvm_component_param_utils(image_pipe_busy_driver#(DW_IN, DW_OUT))
 
     function new(string name, uvm_component parent);
         super.new(name, parent);

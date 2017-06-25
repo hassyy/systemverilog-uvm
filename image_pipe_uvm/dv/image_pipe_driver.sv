@@ -4,10 +4,10 @@
 `include "common_header.svh"
 `include "image_pipe_data.sv"
 
-class image_pipe_driver extends uvm_driver #(image_pipe_data);
+class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(image_pipe_data#(DW_IN, DW_OUT));
     virtual image_pipe_if vif;
 
-    `uvm_component_utils(image_pipe_driver)
+    `uvm_component_param_utils(image_pipe_driver#(DW_IN, DW_OUT))
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -29,11 +29,11 @@ class image_pipe_driver extends uvm_driver #(image_pipe_data);
 
     virtual task reset( );
         forever begin
-            @(negedge vif.rst_n);
             `uvm_info(get_type_name( ), "Resetting signals ", UVM_LOW)
             vif.is_data_in  = '0;
             vif.is_valid_in = '0;
             vif.is_end_in   = '0;
+            @(negedge vif.rst_n);
         end
     endtask: reset
 
@@ -48,11 +48,24 @@ class image_pipe_driver extends uvm_driver #(image_pipe_data);
         end
     endtask: get_and_drive
 
-    virtual task drive_data(image_pipe_data data_tmp);
+    virtual task drive_data(image_pipe_data#(DW_IN, DW_OUT) req);
 
-        vif.is_data_in  = data_tmp.is_data_in;
-        vif.is_valid_in = data_tmp.is_valid_in;
-        vif.is_end_in   = data_tmp.is_end_in;
+        vif.is_data_in  = vif.is_data_in;
+        vif.is_valid_in = vif.is_valid_in;
+        vif.is_end_in   = vif.is_end_in;
+
+        if (req.first_data_flag)
+            repeat(req.wait_before_transmit) @(posedge vif.clk);
+        else
+        if (req.last_data_flag)
+            repeat(req.wait_before_end) @(posedge vif.clk);
+        else
+            repeat(req.valid_interval) @(posedge vif.clk);
+
+        req.displayAll();
+        vif.is_data_in  = req.is_data_in;
+        vif.is_valid_in = req.is_valid_in;
+        vif.is_end_in   = req.is_end_in;
 
         @(posedge vif.clk);
     endtask: drive_data

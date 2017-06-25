@@ -8,16 +8,16 @@
 `include "image_pipe_monitor.sv"
 
 
-class image_pipe_agent extends uvm_agent;
+class image_pipe_agent #(int DW_IN=32, int DW_OUT=32) extends uvm_agent;
     protected uvm_active_passive_enum is_active = UVM_ACTIVE;
     protected uvm_active_passive_enum is_busy_active = UVM_ACTIVE;
 
-    image_pipe_sequencer sequencer;
-    image_pipe_driver driver;
-    image_pipe_busy_driver busy_driver;
-    image_pipe_monitor monitor;
+    image_pipe_sequencer#(DW_IN, DW_OUT) sequencer;
+    image_pipe_driver#(DW_IN, DW_OUT) driver;
+    image_pipe_busy_driver#(DW_IN, DW_OUT) busy_driver;
+    image_pipe_monitor#(DW_IN, DW_OUT) monitor;
 
-    `uvm_component_utils_begin(image_pipe_agent)
+    `uvm_component_param_utils_begin(image_pipe_agent#(DW_IN, DW_OUT))
         `uvm_field_enum(uvm_active_passive_enum, is_active, UVM_ALL_ON)
         `uvm_field_enum(uvm_active_passive_enum, is_busy_active, UVM_ALL_ON)
     `uvm_component_utils_end
@@ -29,14 +29,14 @@ class image_pipe_agent extends uvm_agent;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if (is_active==UVM_ACTIVE) begin
-            sequencer = image_pipe_sequencer::type_id::create("sequencer", this);
-            driver = image_pipe_driver::type_id::create("driver", this);
+            sequencer = image_pipe_sequencer#(DW_IN, DW_OUT)::type_id::create("sequencer", this);
+            driver = image_pipe_driver#(DW_IN, DW_OUT)::type_id::create("driver", this);
         end
         if (is_busy_active==UVM_ACTIVE) begin
-            busy_driver = image_pipe_busy_driver::type_id::create("busy_driver", this);
+            busy_driver = image_pipe_busy_driver#(DW_IN, DW_OUT)::type_id::create("busy_driver", this);
         end
 
-        monitor = image_pipe_monitor::type_id::create("monitor", this);
+        monitor = image_pipe_monitor#(DW_IN, DW_OUT)::type_id::create("monitor", this);
 
         `uvm_info(get_full_name( ), "Build stage compete.", UVM_LOW)
     endfunction : build_phase
