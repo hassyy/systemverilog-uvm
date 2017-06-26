@@ -6,11 +6,13 @@
 
 
 class image_pipe_scoreboard extends uvm_scoreboard;
-    uvm_tlm_analysis_fifo #(image_pipe_data) input_data_collected;
-    uvm_tlm_analysis_fifo #(image_pipe_data) output_data_collected;
+    localparam DW_IN=32;
+    localparam DW_OUT=32;
+    uvm_tlm_analysis_fifo #(image_pipe_data#(DW_IN, DW_OUT)) input_data_collected;
+    uvm_tlm_analysis_fifo #(image_pipe_data#(DW_IN, DW_OUT)) output_data_collected;
 
-    image_pipe_data input_data;
-    image_pipe_data output_data;
+    image_pipe_data#(DW_IN, DW_OUT) input_data;
+    image_pipe_data#(DW_IN, DW_OUT) output_data;
 
     `uvm_component_utils(image_pipe_scoreboard)
 
@@ -24,8 +26,8 @@ class image_pipe_scoreboard extends uvm_scoreboard;
         input_data_collected = new("input_data_collected", this);
         output_data_collected = new("output_data_collected", this);
 
-        input_data = image_pipe_data::type_id::create("input_data");
-        output_data = image_pipe_data::type_id::create("output_data");
+        input_data = image_pipe_data#(DW_IN, DW_OUT)::type_id::create("input_data");
+        output_data = image_pipe_data#(DW_IN, DW_OUT)::type_id::create("output_data");
 
         `uvm_info(get_full_name(), "Build stage complete.", UVM_LOW)
 
