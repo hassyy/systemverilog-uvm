@@ -9,6 +9,8 @@ module tb;
     bit clk;
     bit rst_n;
 
+    // image_pipe_if #(.DW_IN(DW_IN), .DW_OUT(DW_OUT)) ivif(.clk(clk), .rst_n(rst_n));
+    // image_pipe_if #(.DW_IN(DW_IN), .DW_OUT(DW_OUT)) ovif(.clk(clk), .rst_n(rst_n));
     image_pipe_if ivif(.clk(clk), .rst_n(rst_n));
     image_pipe_if ovif(.clk(clk), .rst_n(rst_n));
 

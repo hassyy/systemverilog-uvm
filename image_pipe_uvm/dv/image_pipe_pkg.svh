@@ -12,6 +12,7 @@ package image_pipe_pkg;
     `include "image_pipe_busy_driver.sv"
     `include "image_pipe_monitor.sv"
     `include "image_pipe_sequencer.sv"
+    `include "image_pipe_busy_sequencer.sv"
     `include "image_pipe_agent.sv"
     `include "image_pipe_scoreboard.sv"
     `include "image_pipe_coverage.sv"

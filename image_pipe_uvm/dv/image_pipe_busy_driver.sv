@@ -4,7 +4,7 @@
 `include "common_header.svh"
 `include "image_pipe_data.sv"
 
-class image_pipe_busy_driver #(int DW_IN, int DW_OUT) extends uvm_driver #(image_pipe_data #(DW_IN, DW_OUT));
+class image_pipe_busy_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(image_pipe_data #(DW_IN, DW_OUT));
     virtual image_pipe_if vif;
 
     `uvm_component_param_utils(image_pipe_busy_driver#(DW_IN, DW_OUT))
@@ -21,17 +21,38 @@ class image_pipe_busy_driver #(int DW_IN, int DW_OUT) extends uvm_driver #(image
     endfunction
 
     virtual task run_phase(uvm_phase phase);
-        drive_busy();
+        fork
+            reset();
+            get_and_drive();
+        join
     endtask: run_phase
 
-    virtual task drive_busy( );
+    virtual task reset();
         forever begin
-            if (vif.rst_n==1'b0)
-                vif.im_busy_in = '1;
-            else
-                vif.im_busy_in = '0;
-            @(posedge vif.clk);
+            `uvm_info(get_type_name(), "Resetting signals ", UVM_LOW)
+            vif.im_busy_in= '0;
+            @(negedge vif.rst_n);
         end
+    endtask: reset
+
+    virtual task get_and_drive( );
+        forever begin
+            @(posedge vif.rst_n);
+            while (vif.rst_n != 1'b0) begin
+                seq_item_port.get_next_item(req);
+                drive_busy(req);
+                seq_item_port.item_done( );
+            end
+        end
+    endtask: get_and_drive
+
+    virtual task drive_busy(image_pipe_data#() req);
+        vif.im_busy_in = vif.im_busy_in;
+
+        repeat(req.busy_interval) @(posedge vif.clk);
+
+        vif.im_busy_in = req.im_busy_in;
+        @(posedge vif.clk);
     endtask: drive_busy
 
 endclass: image_pipe_busy_driver

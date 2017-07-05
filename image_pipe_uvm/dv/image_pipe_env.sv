@@ -8,7 +8,10 @@
 
 class image_pipe_env extends uvm_env;
 
-    image_pipe_agent#(32, 32) agent;
+    localparam DW_IN=32;
+    localparam DW_OUT=32;
+
+    image_pipe_agent#(DW_IN, DW_OUT) agent;
 
     `uvm_component_utils(image_pipe_env)
 
@@ -19,7 +22,7 @@ class image_pipe_env extends uvm_env;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
 
-        agent = image_pipe_agent#(32, 32)::type_id::create("agent", this);
+        agent = image_pipe_agent#(DW_IN, DW_OUT)::type_id::create("agent", this);
 
         `uvm_info(get_full_name( ), "Build stage complete.", UVM_LOW)
     endfunction : build_phase
