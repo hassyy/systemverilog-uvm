@@ -6,6 +6,7 @@ package image_pipe_pkg;
     `include "uvm_macros.svh"
 
     `include "define.svh"
+    `include "image_pipe_define.svh"
 
     `include "image_pipe_data.sv"
     `include "image_pipe_driver.sv"

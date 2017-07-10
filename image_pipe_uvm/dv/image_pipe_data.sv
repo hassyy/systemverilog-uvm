@@ -27,7 +27,7 @@ class image_pipe_data #(int DW_IN=32, int DW_OUT=32) extends uvm_sequence_item;
 
     rand int wait_before_busy_start;
     rand int busy_assert_cycle;
-    rand int busy_interval;
+    rand int busy_negate_cycle;
 
 
     // Default constraint
@@ -49,7 +49,7 @@ class image_pipe_data #(int DW_IN=32, int DW_OUT=32) extends uvm_sequence_item;
 
         soft wait_before_busy_start==0;
         soft busy_assert_cycle==0;
-        soft busy_interval==0;
+        soft busy_negate_cycle==0;
     }
 
     `uvm_object_utils_begin(image_pipe_data#(DW_IN, DW_OUT))
@@ -70,12 +70,19 @@ class image_pipe_data #(int DW_IN=32, int DW_OUT=32) extends uvm_sequence_item;
         `uvm_field_int(wait_before_end, UVM_DEFAULT)
         `uvm_field_int(wait_before_busy_start, UVM_DEFAULT)
         `uvm_field_int(busy_assert_cycle, UVM_DEFAULT)
-        `uvm_field_int(busy_interval, UVM_DEFAULT)
+        `uvm_field_int(busy_negate_cycle, UVM_DEFAULT)
     `uvm_object_utils_end
 
     function new(string name = "image_pipe_data");
         super.new(name);
     endfunction: new
+
+    virtual task display_busy();
+        `uvm_info(" BUSY"
+                    , $sformatf("wait_before:%3d, assert:%3d, negate:%3d"
+                    , wait_before_busy_start, busy_assert_cycle, busy_negate_cycle
+                    ), UVM_LOW);
+    endtask: display_busy
 
     virtual task displayAll();
         `uvm_info("DP", $sformatf("is_data_in=%0h is_valid_in=%0b is_end_in=%0h is_busy_out=%0h

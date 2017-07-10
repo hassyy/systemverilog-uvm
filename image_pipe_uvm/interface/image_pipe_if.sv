@@ -13,6 +13,16 @@ interface image_pipe_if
     logic              im_valid_out;
     logic              im_end_out;
     logic              im_busy_in;
+
+    clocking cb_tb @(posedge clk);
+        default input #1ns output negedge;
+
+        // output: drived from TB (by drivers)
+        output is_data_in, is_valid_in, is_end_in, im_busy_in;
+        // input: observed from TB (by monitors)
+        input im_data_out, im_valid_out, im_end_out, is_busy_out;
+    endclocking
+
 endinterface: image_pipe_if
 
 `endif

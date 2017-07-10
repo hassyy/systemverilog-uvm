@@ -16,8 +16,8 @@ class image_pipe_agent #(int DW_IN=32, int DW_OUT=32) extends uvm_agent;
     image_pipe_sequencer#(DW_IN, DW_OUT) sequencer;
     image_pipe_driver#(DW_IN, DW_OUT) driver;
 
-    image_pipe_sequencer#() busy_sequencer;
-    image_pipe_busy_driver#() busy_driver;
+    image_pipe_busy_sequencer#(DW_IN, DW_OUT) busy_sequencer;
+    image_pipe_busy_driver busy_driver;
 
     image_pipe_monitor#(DW_IN, DW_OUT) monitor;
 
@@ -39,7 +39,7 @@ class image_pipe_agent #(int DW_IN=32, int DW_OUT=32) extends uvm_agent;
         if (is_busy_active==UVM_ACTIVE) begin
             // Use defualt parameter. No specify DW_IN, DW_OUT
             busy_sequencer = image_pipe_busy_sequencer#(DW_IN, DW_OUT)::type_id::create("busy_sequencer", this);
-            busy_driver = image_pipe_busy_driver#()::type_id::create("busy_driver", this);
+            busy_driver = image_pipe_busy_driver::type_id::create("busy_driver", this);
         end
 
         monitor = image_pipe_monitor#(DW_IN, DW_OUT)::type_id::create("monitor", this);

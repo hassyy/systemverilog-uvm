@@ -4,6 +4,7 @@
 `include "../dv/common_header.svh"
 `include "../dv/define.svh"
 `include "../dv/image_pipe_sequence_lib.sv"
+`include "../dv/image_pipe_busy_sequence_lib.sv"
 `include "../dv/image_pipe_data.sv"
 `include "../dv/test_lib.sv"
 
@@ -18,6 +19,9 @@ class image_pipe_data_random_timing extends image_pipe_data#(`IMAGE_PIPE_DW_IN1,
     wait_before_transmit inside {[5:10]};
     valid_interval       inside {[0:2]};
     wait_before_end      inside {[0:5]};
+
+    busy_assert_cycle inside {[1:3]};
+    busy_negate_cycle inside {[1:5]};
   }
 
   // Override displayAll()
@@ -45,12 +49,19 @@ class image_pipe_primary_test extends base_test;
 
   virtual task run_phase(uvm_phase phase);
     many_random_sequence#(32,32) seq;
+    normal_busy_sequence busy_seq;
 
     super.run_phase(phase);
+
     phase.raise_objection(this);
     seq = many_random_sequence#(32,32)::type_id::create("seq");
+    busy_seq = normal_busy_sequence::type_id::create("seq");
+
     assert(seq.randomize());
-    seq.start(env.penv_in.agent.sequencer);
+    fork
+      seq.start(env.penv_in.agent.sequencer);
+      busy_seq.start(env.penv_out.agent.busy_sequencer);
+    join_any
     phase.drop_objection(this);
   endtask
 endclass: image_pipe_primary_test

@@ -2,6 +2,8 @@
     `define __IMAGE_PIPE_DRIVER__
 
 `include "common_header.svh"
+`include "define.svh"
+`include "image_pipe_define.svh"
 `include "image_pipe_data.sv"
 
 class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(image_pipe_data#(DW_IN, DW_OUT));
@@ -22,17 +24,17 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
 
     virtual task run_phase(uvm_phase phase);
         fork
-            reset( );
-            get_and_drive( );
+            reset();
+            get_and_drive();
         join
     endtask: run_phase
 
     virtual task reset( );
         forever begin
             `uvm_info(get_type_name( ), "Resetting signals ", UVM_LOW)
-            vif.is_data_in  = '0;
-            vif.is_valid_in = '0;
-            vif.is_end_in   = '0;
+            vif.cb_tb.is_data_in  <= '0;
+            vif.cb_tb.is_valid_in <= '0;
+            vif.cb_tb.is_end_in   <= '0;
             @(negedge vif.rst_n);
         end
     endtask: reset
@@ -50,24 +52,35 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
 
     virtual task drive_data(image_pipe_data#(DW_IN, DW_OUT) req);
 
-        vif.is_data_in  = vif.is_data_in;
-        vif.is_valid_in = vif.is_valid_in;
-        vif.is_end_in   = vif.is_end_in;
+        while (vif.rst_n == `RESET_ACTIVE)
+            // Wait during reset
+            @(posedge vif.cb_tb);
 
         if (req.first_data_flag)
-            repeat(req.wait_before_transmit) @(posedge vif.clk);
+            repeat(req.wait_before_transmit) @(posedge vif.cb_tb);
         else
         if (req.last_data_flag)
-            repeat(req.wait_before_end) @(posedge vif.clk);
+            repeat(req.wait_before_end) @(posedge vif.cb_tb);
         else
-            repeat(req.valid_interval) @(posedge vif.clk);
+            repeat(req.valid_interval) @(posedge vif.cb_tb);
 
-        req.displayAll();
-        vif.is_data_in  = req.is_data_in;
-        vif.is_valid_in = req.is_valid_in;
-        vif.is_end_in   = req.is_end_in;
+        vif.cb_tb.is_data_in  <= req.is_data_in;
+        vif.cb_tb.is_valid_in <= req.is_valid_in;
+        vif.cb_tb.is_end_in   <= req.is_end_in;
 
-        @(posedge vif.clk);
+        while (1) begin
+            if (vif.cb_tb.is_busy_out != `IMAGE_PIPE_BUSY_ACTIVE) begin
+                @(posedge vif.cb_tb);
+                break;
+            end
+            else begin
+                // Wait during reset
+                $display($sformatf("[%t][%s] Wait under BUSY_ACTIVE", $stime(), get_name()));
+                @(posedge vif.cb_tb);
+            end
+        end
+
+
     endtask: drive_data
 
 endclass: image_pipe_driver
