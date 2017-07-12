@@ -16,18 +16,20 @@ module tb;
     image_pipe_if ovif(.clk(clk), .rst_n(rst_n));
 
     image_pipe image_pipe_top(
-        .clk(ivif.clk)
-        , .rst_n(ivif.rst_n)
+        .clk(clk)
+        , .rst_n(rst_n)
 
-        , .is_data_in(ivif.cb_tb.is_data_in)
-        , .is_valid_in(ivif.cb_tb.is_valid_in)
-        , .is_end_in(ivif.cb_tb.is_end_in)
-        , .is_busy_out(ivif.cb_tb.is_busy_out)
+        // Connection between DUT and TB must be the vif without clocking block.
+        // Or clocking skews are not applied to DUT.
+        , .is_data_in(ivif.is_data_in)
+        , .is_valid_in(ivif.is_valid_in)
+        , .is_end_in(ivif.is_end_in)
+        , .is_busy_out(ivif.is_busy_out)
 
-        , .im_data_out(ovif.cb_tb.im_data_out)
-        , .im_valid_out(ovif.cb_tb.im_valid_out)
-        , .im_end_out(ovif.cb_tb.im_end_out)
-        , .im_busy_in(ovif.cb_tb.im_busy_in)
+        , .im_data_out(ovif.im_data_out)
+        , .im_valid_out(ovif.im_valid_out)
+        , .im_end_out(ovif.im_end_out)
+        , .im_busy_in(ovif.im_busy_in)
     );
 
     // TASKs

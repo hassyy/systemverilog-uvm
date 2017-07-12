@@ -42,7 +42,7 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
     virtual task get_and_drive( );
         forever begin
             @(posedge vif.rst_n);
-            while (vif.rst_n != 1'b0) begin
+            while (vif.rst_n != `RESET_ACTIVE) begin
                 seq_item_port.get_next_item(req);
                 drive_data(req);
                 seq_item_port.item_done( );
@@ -52,9 +52,9 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
 
     virtual task drive_data(image_pipe_data#(DW_IN, DW_OUT) req);
 
-        while (vif.rst_n == `RESET_ACTIVE)
-            // Wait during reset
-            @(posedge vif.cb_tb);
+        // Wait during reset
+        // FYI) "iff(condition)" is "while (condition is FALSE)""
+        @(posedge vif.cb_tb iff(vif.rst_n!=`RESET_ACTIVE));
 
         if (req.first_data_flag)
             repeat(req.wait_before_transmit) @(posedge vif.cb_tb);
@@ -68,18 +68,8 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
         vif.cb_tb.is_valid_in <= req.is_valid_in;
         vif.cb_tb.is_end_in   <= req.is_end_in;
 
-        while (1) begin
-            if (vif.cb_tb.is_busy_out != `IMAGE_PIPE_BUSY_ACTIVE) begin
-                @(posedge vif.cb_tb);
-                break;
-            end
-            else begin
-                // Wait during reset
-                $display($sformatf("[%t][%s] Wait under BUSY_ACTIVE", $stime(), get_name()));
-                @(posedge vif.cb_tb);
-            end
-        end
-
+        // Wait clk if busy is active.
+        @(posedge vif.cb_tb iff(vif.cb_tb.is_busy_out!=`IMAGE_PIPE_BUSY_ACTIVE));
 
     endtask: drive_data
 

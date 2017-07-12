@@ -54,9 +54,10 @@ class image_pipe_busy_driver extends uvm_driver #(image_pipe_data #());
     endtask: get_and_drive
 
     virtual task drive_busy(image_pipe_data#() req);
-        //req.display_busy();
         $timeformat(-9, 3, "ns" ,10);
 
+        // Here, you must use vif with clocking block.
+        // Or you cannot see the skew as expected.
         if (vif.rst_n == `RESET_ACTIVE)
             // Wait during reset
             @(posedge vif.cb_tb);

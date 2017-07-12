@@ -10,7 +10,7 @@ module image_pipe
     , input wire is_valid_in
     , input wire is_end_in
     , output reg is_busy_out
-    , output reg[DW_OUT-1:0] im_data_out
+    , output reg [DW_OUT-1:0] im_data_out
     , output reg im_valid_out
     , output reg im_end_out
     , input wire im_busy_in

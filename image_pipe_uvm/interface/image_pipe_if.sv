@@ -2,7 +2,10 @@
     `define __IMAGE_PIPE_IF__
 
 interface image_pipe_if
-    #(parameter DW_IN=32, parameter DW_OUT=32)
+    #(  parameter DW_IN=32
+        , parameter DW_OUT=32
+        , parameter INPUT_SKEW=1ns
+        , parameter OUTPUT_SKEW=1ns)
     (input logic clk, rst_n);
 
     logic [DW_IN-1:0]  is_data_in;
@@ -15,7 +18,7 @@ interface image_pipe_if
     logic              im_busy_in;
 
     clocking cb_tb @(posedge clk);
-        default input #1ns output negedge;
+        default input #INPUT_SKEW output #OUTPUT_SKEW;
 
         // output: drived from TB (by drivers)
         output is_data_in, is_valid_in, is_end_in, im_busy_in;
