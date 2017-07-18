@@ -19,7 +19,6 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
         super.build_phase(phase);
         if (!uvm_config_db#(virtual image_pipe_if)::get(this, "", "in_intf", vif))
             `uvm_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name( ), ".vif"})
-        `uvm_info(get_full_name( ), "Build stage complete.", UVM_LOW)
     endfunction
 
     virtual task run_phase(uvm_phase phase);
@@ -44,13 +43,13 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
             @(posedge vif.rst_n);
             while (vif.rst_n != `RESET_ACTIVE) begin
                 seq_item_port.get_next_item(req);
-                drive_data(req);
+                drive_sig(req);
                 seq_item_port.item_done( );
             end
         end
     endtask: get_and_drive
 
-    virtual task drive_data(image_pipe_data#(DW_IN, DW_OUT) req);
+    virtual task drive_sig(image_pipe_data#(DW_IN, DW_OUT) req);
 
         // Wait during reset
         // FYI) "iff(condition)" is "while (condition is FALSE)""
@@ -71,7 +70,7 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
         // Wait clk if busy is active.
         @(posedge vif.cb_tb iff(vif.cb_tb.is_busy_out!=`IMAGE_PIPE_BUSY_ACTIVE));
 
-    endtask: drive_data
+    endtask: drive_sig
 
 endclass: image_pipe_driver
 
