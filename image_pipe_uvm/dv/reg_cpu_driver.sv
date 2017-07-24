@@ -68,8 +68,8 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
 
         // Decode cmd_type
         case (req.reg_cpu_cmd)
-            reg_cpu_data#()::WRITE: drive_write(req);
-            reg_cpu_data#()::READ:  drive_read(req);
+            reg_cpu_data#()::WRITE: drive_sig_write(req);
+            reg_cpu_data#()::READ:  drive_sig_read(req);
         endcase
 
         repeat(req.cmd_interval) @(posedge vif.cb_tb);

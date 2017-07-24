@@ -49,7 +49,7 @@ class dut_reg_adapter extends uvm_reg_adapter;
         if (data_tx.reg_cpu_cmd==reg_cpu_data#()::t_reg_cpu_cmd::WRITE)
             rw.data = data_tx.reg_cpu_wr_data;
 
-        wr.status = UVM_IS_OK;
+        rw.status = UVM_IS_OK;
     endfunction: bus2reg
 
 endclass: dut_reg_adapter

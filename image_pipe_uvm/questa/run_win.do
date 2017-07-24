@@ -4,11 +4,13 @@ if [file exists work] {
 }
 vlib work
 
-set DESIGN_PATH "../design"
-set DV_PATH "../dv"
-set TEST_PATH "../test"
+set PATH_TO_ROOT_DIR ..
+set DESIGN_PATH $PATH_TO_ROOT_DIR/design
+set DV_PATH $PATH_TO_ROOT_DIR/dv
+set TEST_PATH $PATH_TO_ROOT_DIR/test
+set INTERFACE_PATH $PATH_TO_ROOT_DIR/interface
 
-vlog -suppress 2269 -suppress 2286 -suppress 2643 -mfcu +incdir+../dv +incdir+../test +define+QUESTA ../dv/image_pipe_pkg.svh ../interface/image_pipe_if.sv ../dv/tb.sv $DESIGN_PATH/image_pipe.sv
+vlog ../dv/tb.sv -mfcu -suppress 2269 -suppress 2286 -suppress 2643 +define+QUESTA +incdir+$DESIGN_PATH +incdir+$DV_PATH +incdir+$TEST_PATH +incdir+$INTERFACE_PATH
 
 vsim tb -voptargs="+acc" -classdebug -uvmcontrol=all \
 +UVM_OBJECTION_TRACE \

@@ -1,5 +1,8 @@
 `ifndef __IMAGE_PIPE__
-    `define __IMAGE_PIPE__
+`define __IMAGE_PIPE__
+
+`include "image_pipe_if.sv"
+`include "reg_cpu_if.sv"
 
 module image_pipe
     #(parameter DW_IN=32, DW_OUT=32)
@@ -11,12 +14,12 @@ module image_pipe
     , input wire image_pipe_valid_in
     , input wire image_pipe_end_in
     , output reg image_pipe_busy_out
-    , output reg [DW_OUT-1:0] ipm_data_out
-    , output reg ipm_valid_out
-    , output reg ipm_end_out
-    , input wire ipm_busy_in
+    , output reg [DW_OUT-1:0] image_pipe_data_out
+    , output reg image_pipe_valid_out
+    , output reg image_pipe_end_out
+    , input wire image_pipe_busy_in
     // U
-    , input wire reg_cpu_cs
+    , input wire reg_cpu_wacks
     , input wire [31:2] reg_cpu_addr
     , input wire [31:0] reg_cpu_data_wr
     , output reg [31:0] reg_cpu_data_rd
@@ -36,7 +39,7 @@ always @(posedge clk) begin
     if (!rst_n)
         image_pipe_busy_out <= 1'b0;
     else begin
-        if (ipm_busy_in)
+        if (image_pipe_busy_in)
             image_pipe_busy_out <= 1'b1;
         else
         if (valid_tmp)
@@ -48,27 +51,27 @@ end
 
 always @(posedge clk) begin
     if (!rst_n) begin
-        ipm_data_out  <= '0;
-        ipm_valid_out <= '0;
+        image_pipe_data_out  <= '0;
+        image_pipe_valid_out <= '0;
     end
     else begin
-        if (ipm_busy_in) begin
+        if (image_pipe_busy_in) begin
             // hold
         end
         else
-        if (!ipm_busy_in) begin
+        if (!image_pipe_busy_in) begin
             if (valid_tmp) begin
-                ipm_data_out <= data_tmp;
-                ipm_valid_out <= valid_tmp;
+                image_pipe_data_out <= data_tmp;
+                image_pipe_valid_out <= valid_tmp;
             end
             else
             if (image_pipe_valid_in) begin
-                ipm_data_out  <= image_pipe_data_in;
-                ipm_valid_out <= image_pipe_valid_in;
+                image_pipe_data_out  <= image_pipe_data_in;
+                image_pipe_valid_out <= image_pipe_valid_in;
             end
             else begin
-                ipm_data_out  <= '0;
-                ipm_valid_out <= 1'b0;
+                image_pipe_data_out  <= '0;
+                image_pipe_valid_out <= 1'b0;
             end
         end
     end
@@ -76,15 +79,15 @@ end
 
 always @(posedge clk) begin
     if (!rst_n)
-        ipm_end_out <= 1'b0;
+        image_pipe_end_out <= 1'b0;
     else begin
-        if (ipm_end_out) begin
-            if (!ipm_busy_in)
-                ipm_end_out <= 1'b0;
+        if (image_pipe_end_out) begin
+            if (!image_pipe_busy_in)
+                image_pipe_end_out <= 1'b0;
         end
         else
         if (image_pipe_end_in)
-            ipm_end_out <= 1'b1;
+            image_pipe_end_out <= 1'b1;
     end
 end
 
@@ -95,10 +98,10 @@ always @(posedge clk) begin
     end
     else begin
         if (valid_tmp)
-            if (!ipm_busy_in)
+            if (!image_pipe_busy_in)
                 valid_tmp <= 1'b0;
         else
-        if (image_pipe_valid_in & ipm_busy_in) begin
+        if (image_pipe_valid_in & image_pipe_busy_in) begin
             data_tmp <= image_pipe_data_in;
             valid_tmp <= image_pipe_valid_in;
         end

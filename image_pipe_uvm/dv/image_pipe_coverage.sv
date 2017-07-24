@@ -2,9 +2,9 @@
 `include "image_pipe_data.sv"
 
 
-class image_pipe_coverage extends uvm_subscriber #(image_pipe_data);
+class image_pipe_coverage extends uvm_subscriber #(image_pipe_data#());
 
-    image_pipe_data ip_data;
+    image_pipe_data#() ip_data;
     int count;
 
     `uvm_component_utils(image_pipe_coverage)
@@ -26,7 +26,7 @@ class image_pipe_coverage extends uvm_subscriber #(image_pipe_data);
         cg = new( );
     endfunction: new
 
-    function void write(image_pipe_data t);
+    function void write(image_pipe_data#() t);
         ip_data = t;
         count++;
         cg.sample( );
