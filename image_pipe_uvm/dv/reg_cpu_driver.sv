@@ -7,6 +7,8 @@
 
 class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
 
+    `uvm_component_param_utils(reg_cpu_driver)
+
     // Declare vif to drive signals
     virtual reg_cpu_if vif;
 

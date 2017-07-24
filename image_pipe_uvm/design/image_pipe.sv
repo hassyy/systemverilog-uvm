@@ -6,56 +6,69 @@ module image_pipe
     (
     input wire clk
     , input wire rst_n
-    , input wire [DW_IN-1:0] is_data_in
-    , input wire is_valid_in
-    , input wire is_end_in
-    , output reg is_busy_out
-    , output reg [DW_OUT-1:0] im_data_out
-    , output reg im_valid_out
-    , output reg im_end_out
-    , input wire im_busy_in
+    // IMAGE_PIPE
+    , input wire [DW_IN-1:0] image_pipe_data_in
+    , input wire image_pipe_valid_in
+    , input wire image_pipe_end_in
+    , output reg image_pipe_busy_out
+    , output reg [DW_OUT-1:0] ipm_data_out
+    , output reg ipm_valid_out
+    , output reg ipm_end_out
+    , input wire ipm_busy_in
+    // U
+    , input wire reg_cpu_cs
+    , input wire [31:2] reg_cpu_addr
+    , input wire [31:0] reg_cpu_data_wr
+    , output reg [31:0] reg_cpu_data_rd
+    , input wire reg_cpu_we
+    , output reg reg_cpu_wack
+    , input wire reg_cpu_re
+    , output reg reg_cpu_rdv
+
     );
+
+////////// IMAGE_PIPE
 
 logic [DW_IN-1:0] data_tmp;
 logic valid_tmp;
 
 always @(posedge clk) begin
     if (!rst_n)
-        is_busy_out <= 1'b0;
+        image_pipe_busy_out <= 1'b0;
     else begin
-        if (im_busy_in)
-            is_busy_out <= 1'b1;
+        if (ipm_busy_in)
+            image_pipe_busy_out <= 1'b1;
         else
         if (valid_tmp)
-            is_busy_out <= 1'b1;
+            image_pipe_busy_out <= 1'b1;
         else
-            is_busy_out <= 1'b0;
+            image_pipe_busy_out <= 1'b0;
     end
 end
 
 always @(posedge clk) begin
     if (!rst_n) begin
-        im_data_out  <= '0;
-        im_valid_out <= '0;
+        ipm_data_out  <= '0;
+        ipm_valid_out <= '0;
     end
     else begin
-        if (im_busy_in) begin
+        if (ipm_busy_in) begin
             // hold
         end
         else
-        if (!im_busy_in) begin
+        if (!ipm_busy_in) begin
             if (valid_tmp) begin
-                im_data_out <= data_tmp;
-                im_valid_out <= valid_tmp;
+                ipm_data_out <= data_tmp;
+                ipm_valid_out <= valid_tmp;
             end
             else
-            if (is_valid_in) begin
-                im_data_out  <= is_data_in;
-                im_valid_out <= is_valid_in;
+            if (image_pipe_valid_in) begin
+                ipm_data_out  <= image_pipe_data_in;
+                ipm_valid_out <= image_pipe_valid_in;
             end
             else begin
-                im_data_out  <= '0;
-                im_valid_out <= 1'b0;
+                ipm_data_out  <= '0;
+                ipm_valid_out <= 1'b0;
             end
         end
     end
@@ -63,15 +76,15 @@ end
 
 always @(posedge clk) begin
     if (!rst_n)
-        im_end_out <= 1'b0;
+        ipm_end_out <= 1'b0;
     else begin
-        if (im_end_out) begin
-            if (!im_busy_in)
-                im_end_out <= 1'b0;
+        if (ipm_end_out) begin
+            if (!ipm_busy_in)
+                ipm_end_out <= 1'b0;
         end
         else
-        if (is_end_in)
-            im_end_out <= 1'b1;
+        if (image_pipe_end_in)
+            ipm_end_out <= 1'b1;
     end
 end
 
@@ -82,17 +95,120 @@ always @(posedge clk) begin
     end
     else begin
         if (valid_tmp)
-            if (!im_busy_in)
+            if (!ipm_busy_in)
                 valid_tmp <= 1'b0;
         else
-        if (is_valid_in & im_busy_in) begin
-            data_tmp <= is_data_in;
-            valid_tmp <= is_valid_in;
+        if (image_pipe_valid_in & ipm_busy_in) begin
+            data_tmp <= image_pipe_data_in;
+            valid_tmp <= image_pipe_valid_in;
         end
         else
             valid_tmp <= 1'b0;
     end
 end
+
+
+
+////////// U
+
+    reg [12: 0] i_reg_1;
+    reg [15: 0] i_reg_2;
+
+    localparam ADDR_REG_1  = 14'h0;     // 0x82060000;
+    localparam ADDR_REG_2   = 14'h1;     // 0x82060004;
+
+    localparam DEFAULT_REG_1            = 13'h0;
+    localparam DEFAULT_REG_2              = 16'h0;
+
+    // Use RE Rising Edge For reg_cpu_data_rd latch
+    reg  reg_cpu_re_ff1;
+    wire reg_cpu_re_rise_edge;
+
+
+//-------------------------------------------------------------------
+//  reg_mainpix : [READ_WRITE]
+
+    always @ (posedge clk) begin
+        if (!rst_n) begin
+            i_reg_1 <= DEFAULT_REG_1;
+        end
+        else
+        if (reg_cpu_cs && reg_cpu_we &&
+            reg_cpu_addr == ADDR_REG_1) begin
+            i_reg_1 <= reg_cpu_data_wr[12: 0];
+        end
+    end
+
+//-------------------------------------------------------------------
+//  reg_subpix : [READ_WRITE]
+
+    always @ (posedge clk) begin
+        if (!rst_n) begin
+            i_reg_2 <= DEFAULT_REG_2;
+        end
+        else
+        if (reg_cpu_cs && reg_cpu_we &&
+            reg_cpu_addr == ADDR_REG_2) begin
+            i_reg_2 <= reg_cpu_data_wr[15: 0];
+        end
+    end
+
+//-------------------------------------------------------------------
+//  WACK
+
+    always @ (posedge clk) begin
+        if (!rst_n)
+            reg_cpu_wack <= 1'b0;
+        else if (reg_cpu_cs && reg_cpu_we)
+            reg_cpu_wack <= 1'b1;
+        else
+            reg_cpu_wack <= 1'b0;
+    end
+
+//-------------------------------------------------------------------
+//  RDACK
+
+    always @ (posedge clk) begin
+        if (!rst_n)
+            reg_cpu_rdv <= 1'b0;
+        else
+        // for NON-SRAM READ
+        if (reg_cpu_cs && reg_cpu_re)
+            reg_cpu_rdv <= 1'b1;
+        else
+            reg_cpu_rdv <= 1'b0;
+    end
+
+//-------------------------------------------------------------------
+//  reg_cpu_re_rise_edge to latch reg_cpu_data_rd at the begining of read request
+
+    always @ (posedge clk) begin
+        if (!rst_n)
+            reg_cpu_re_ff1 <= 1'b0;
+        else
+            reg_cpu_re_ff1 <= reg_cpu_re;
+    end
+
+    assign reg_cpu_re_rise_edge = reg_cpu_re & !reg_cpu_re_ff1;
+
+//-------------------------------------------------------------------
+//  DATA READ
+
+    always @ (posedge clk) begin
+        if (!rst_n)
+            reg_cpu_data_rd <= 32'h00000000;
+        else
+        //  Latch reg_cpu_data_rd to avoid unexpected UBus Monitor Error
+        if (reg_cpu_cs & reg_cpu_re_rise_edge) begin
+            case (reg_cpu_addr[15:2])
+                ADDR_REG_1 :
+                    reg_cpu_data_rd <= 32'h00000000 | (i_reg_1 <<  0);
+                ADDR_REG_2 :
+                    reg_cpu_data_rd <= 32'h00000000 | (i_reg_2 <<  0);
+                default : reg_cpu_data_rd <= 32'h00000000;
+            endcase
+        end
+    end
 
 endmodule
 

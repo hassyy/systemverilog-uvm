@@ -1,32 +1,32 @@
-`ifndef __REG_CPU_IF__
-    `define __REG_CPU_IF__
+`ifndef __U_IF__
+    `define __U_IF__
 
-interface reg_cpu_if
+interface u_if
     #(  parameter DW=32
         , parameter AW=32
         , parameter INPUT_SKEW=1ns
         , parameter OUTPUT_SKEW=1ns)
-    (input logic reg_cpu_clk, rst_n);
+    (input logic u_clk, rst_n);
 
-    logic          reg_cpu_cs;
-    logic [AW-1:0] reg_cpu_addr;
-    logic [DW-1:0] reg_cpu_wr_data;
-    logic [DW-1:0] reg_cpu_rd_data;
-    logic          reg_cpu_we;
-    logic          reg_cpu_wack;
-    logic          reg_cpu_re;
-    logic          reg_cpu_rdv;
+    logic          u_cs;
+    logic [AW-1:0] u_addr;
+    logic [DW-1:0] u_data_wr;
+    logic [DW-1:0] u_data_wr;
+    logic          u_we;
+    logic          u_wack;
+    logic          u_re;
+    logic          u_rdv;
 
-    clocking cb_tb @(posedge reg_cpu_clk);
+    clocking cb_tb @(posedge u_clk);
         default input #INPUT_SKEW output #OUTPUT_SKEW;
 
-        output  reg_cpu_cs, reg_cpu_addr
-                , reg_cpu_wr_data
-                , reg_cpu_we, reg_cpu_re;
-        input reg_cpu_rd_data, reg_cpu_wack, reg_cpu_rdv;
+        output  u_cs, u_addr
+                , u_wr_data
+                , u_we, u_re;
+        input u_rd_data, u_wack, u_rdv;
     endclocking
 
-endinterface: reg_cpu_if
+endinterface: u_if
 
 `endif
 

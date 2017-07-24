@@ -44,7 +44,7 @@ class image_pipe_agent #(int DW_IN=32, int DW_OUT=32) extends uvm_agent;
 
         monitor = image_pipe_monitor#(DW_IN, DW_OUT)::type_id::create("monitor", this);
 
-        `uvm_info(get_full_name( ), "Build stage compete.", UVM_LOW)
+        `uvm_info(get_full_name( ), "Build stage complete.", UVM_LOW)
     endfunction : build_phase
 
     function void connect_phase(uvm_phase phase);

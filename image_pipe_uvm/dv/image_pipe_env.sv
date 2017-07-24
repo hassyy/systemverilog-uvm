@@ -4,6 +4,7 @@
 
 `include "common_header.svh"
 `include "image_pipe_agent.sv"
+`include "reg_cpu_agent.sv"
 
 
 class image_pipe_env extends uvm_env;
@@ -12,6 +13,7 @@ class image_pipe_env extends uvm_env;
     localparam DW_OUT=32;
 
     image_pipe_agent#(DW_IN, DW_OUT) agent;
+    reg_cpu_agent reg_agent;
 
     `uvm_component_utils(image_pipe_env)
 
@@ -23,6 +25,7 @@ class image_pipe_env extends uvm_env;
         super.build_phase(phase);
 
         agent = image_pipe_agent#(DW_IN, DW_OUT)::type_id::create("agent", this);
+        reg_agent = reg_cpu_agent::type_id::create("reg_agent", this);
 
         `uvm_info(get_full_name( ), "Build stage complete.", UVM_LOW)
     endfunction : build_phase
