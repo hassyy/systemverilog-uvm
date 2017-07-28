@@ -5,6 +5,7 @@
 `include "define.svh"
 `include "reg_cpu_data.sv"
 
+// FYI) uvm_driver #(REQ, RESP=REQ)
 class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
 
     `uvm_component_param_utils(reg_cpu_driver)
@@ -41,7 +42,7 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
         forever begin
             vif.cb_tb.reg_cpu_cs      <= '0;
             vif.cb_tb.reg_cpu_addr    <= '0;
-            vif.cb_tb.reg_cpu_wr_data <= '0;
+            vif.cb_tb.reg_cpu_data_wr <= '0;
             vif.cb_tb.reg_cpu_we      <= '0;
             vif.cb_tb.reg_cpu_re      <= '0;
             @(negedge vif.rst_n);
@@ -49,27 +50,30 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
     endtask: reset
 
 
+    // FYI) "req" is declared in uvm_driver.
+    // Use only "req" for both get_next_item() and item_done()
+    // I dont know how to use rsp for item_done()...
     virtual task get_and_drive();
         forever begin
             @(posedge vif.rst_n);
             while (vif.rst_n != `RESET_ACTIVE) begin
                 seq_item_port.get_next_item(req);
-                drive_sig(req);
-                seq_item_port.item_done();
+                drive_sig();
+                seq_item_port.item_done(req);
             end
         end
     endtask: get_and_drive
 
 
-    virtual task drive_sig(reg_cpu_data#() req);
+    virtual task drive_sig();
 
         // Wait during reset
         @(posedge vif.cb_tb iff(vif.rst_n != `RESET_ACTIVE));
 
         // Decode cmd_type
         case (req.reg_cpu_cmd)
-            reg_cpu_data#()::WRITE: drive_sig_write(req);
-            reg_cpu_data#()::READ:  drive_sig_read(req);
+            reg_cpu_data#()::WRITE: write();
+            reg_cpu_data#()::READ:  read();
         endcase
 
         repeat(req.cmd_interval) @(posedge vif.cb_tb);
@@ -77,48 +81,48 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
     endtask: drive_sig
 
 
-    virtual task drive_sig_write(reg_cpu_data#() req);
+    virtual task write();
 
         // [step1] Assert cs, addr, we
-        vif.cb_tb.reg_cpu_cs   <= 1'b1;
-        vif.cb_tb.reg_cpu_addr <= req.reg_cpu_addr;
-        vif.cb_tb.reg_cpu_we   <= 1'b1;
+        vif.cb_tb.reg_cpu_cs      <= 1'b1;
+        vif.cb_tb.reg_cpu_we      <= 1'b1;
+        vif.cb_tb.reg_cpu_addr    <= req.reg_cpu_addr;
+        vif.cb_tb.reg_cpu_data_wr <= req.reg_cpu_data_wr;
 
         // [step2] Wait for wack.
         @(posedge vif.cb_tb.reg_cpu_wack);
 
         // [step3] Negate cs, addr, we
-        vif.cb_tb.reg_cpu_cs   <= '0;
-        vif.cb_tb.reg_cpu_addr <= '0;
-        vif.cb_tb.reg_cpu_we   <= '0;
+        vif.cb_tb.reg_cpu_cs      <= '0;
+        vif.cb_tb.reg_cpu_we      <= '0;
+        vif.cb_tb.reg_cpu_addr    <= '0;
+        vif.cb_tb.reg_cpu_data_wr <= '0;
         @(posedge vif.cb_tb);
 
-    endtask: drive_sig_write
+    endtask: write
 
 
-    virtual task drive_sig_read(reg_cpu_data#() req);
+    virtual task read();
 
         // [step1] Assert cs, addr, re
         vif.cb_tb.reg_cpu_cs   <= 1'b1;
-        vif.cb_tb.reg_cpu_addr <= req.reg_cpu_addr;
         vif.cb_tb.reg_cpu_re   <= 1'b1;
+        vif.cb_tb.reg_cpu_addr <= req.reg_cpu_addr;
 
         // [step2] Wait for rdv.
         @(posedge vif.cb_tb.reg_cpu_rdv);
 
         // [step3] Get read_data, negate cs, addr, re
-        req.reg_cpu_rd_data <= vif.cb_tb.reg_cpu_cs;
+        // Use req for returning value to item_done() just for convention.
         vif.cb_tb.reg_cpu_cs   <= '0;
         vif.cb_tb.reg_cpu_addr <= '0;
         vif.cb_tb.reg_cpu_re   <= '0;
+
+        // Set retuen value for sequencer.
+        req.reg_cpu_data_rd = vif.cb_tb.reg_cpu_data_rd; 
         @(posedge vif.cb_tb);
 
-    endtask: drive_sig_read
-
-
-
-
-
+    endtask: read
 
 endclass: reg_cpu_driver
 

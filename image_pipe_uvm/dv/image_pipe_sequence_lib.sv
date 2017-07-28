@@ -4,15 +4,15 @@
 `include "common_header.svh"
 `include "image_pipe_data.sv"
 
-class many_random_sequence extends uvm_sequence #(image_pipe_data#());
+class image_pipe_simple_sequence extends uvm_sequence #(image_pipe_data#());
     rand int loop;
     constraint default_constraint {
         soft loop inside {[5:10]};
     }
 
-    `uvm_object_param_utils(many_random_sequence)
+    `uvm_object_param_utils(image_pipe_simple_sequence)
 
-    function new(string name = "many_random_sequence");
+    function new(string name = "image_pipe_simple_sequence");
         super.new(name);
     endfunction: new
 
@@ -50,6 +50,6 @@ class many_random_sequence extends uvm_sequence #(image_pipe_data#());
             });
     endtask : body
 
-endclass : many_random_sequence
+endclass : image_pipe_simple_sequence
 
 `endif

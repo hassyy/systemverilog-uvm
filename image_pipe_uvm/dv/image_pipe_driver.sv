@@ -26,6 +26,7 @@ class image_pipe_driver #(int DW_IN=32, int DW_OUT=32) extends uvm_driver #(imag
             reset();
             get_and_drive();
         join
+            `uvm_info(get_type_name( ), "RUN_PHASE DONE.", UVM_LOW)
     endtask: run_phase
 
     virtual task reset( );

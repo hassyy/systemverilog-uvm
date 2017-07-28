@@ -4,6 +4,7 @@
 `include "common_header.svh"
 `include "image_pipe_env.sv"
 `include "image_pipe_scoreboard.sv"
+`include "dut_reg_block.sv"
 
 
 class dut_env extends uvm_env;
@@ -37,7 +38,6 @@ class dut_env extends uvm_env;
         sb = image_pipe_scoreboard::type_id::create("sb", this);
 
         reg_env = reg_cpu_env::type_id::create("reg_env", this);
-        //eg_predictor = reg_cpu_reg_predictor::type_id::create(.name("reg_predictor"), .parent(this));
 
         `uvm_info(get_full_name( ), "Build stage complete.", UVM_LOW)
     endfunction: build_phase
@@ -47,7 +47,10 @@ class dut_env extends uvm_env;
         penv_out.agent.monitor.item_collected_port.connect(sb.output_data_collected.analysis_export);
 
         if (reg_block.get_parent()==null)
-            reg_block.reg_map.set_sequencer(.sequencer(reg_env.agent.sequencer), .adapter(reg_env.agent.adapter));
+            reg_block.reg_map.set_sequencer(
+                .sequencer(reg_env.agent.sequencer),
+                .adapter(reg_env.agent.adapter)
+            );
 
         reg_env.reg_predictor.map = reg_block.reg_map;
         reg_env.reg_predictor.adapter = reg_env.agent.adapter;

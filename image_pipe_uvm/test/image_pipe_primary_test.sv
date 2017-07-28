@@ -48,14 +48,14 @@ class image_pipe_primary_test extends base_test;
 
     virtual task run_phase(uvm_phase phase);
 
-        many_random_sequence seq;
+        image_pipe_simple_sequence seq;
         normal_busy_sequence busy_seq;
 
         super.run_phase(phase);
 
         phase.raise_objection(this);
-        seq = many_random_sequence::type_id::create("seq");
-        busy_seq = normal_busy_sequence::type_id::create("seq");
+        seq = image_pipe_simple_sequence::type_id::create("seq");
+        busy_seq = normal_busy_sequence::type_id::create("busy_seq");
 
         assert(seq.randomize());
         fork

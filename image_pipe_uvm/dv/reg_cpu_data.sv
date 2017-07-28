@@ -10,8 +10,8 @@ class reg_cpu_data #(int AW=32, int DW=32) extends uvm_sequence_item;
 
     rand bit reg_cpu_cs;
     rand bit [AW-1:0] reg_cpu_addr;
-    rand bit [DW-1:0] reg_cpu_wr_data;
-    rand bit [DW-1:0] reg_cpu_rd_data;
+    rand bit [DW-1:0] reg_cpu_data_wr;
+    rand bit [DW-1:0] reg_cpu_data_rd;
     rand bit reg_cpu_we;
     rand bit reg_cpu_re;
     rand bit reg_cpu_wack;
@@ -31,8 +31,8 @@ class reg_cpu_data #(int AW=32, int DW=32) extends uvm_sequence_item;
 
         `uvm_field_int(reg_cpu_cs, UVM_DEFAULT)
         `uvm_field_int(reg_cpu_addr, UVM_DEFAULT)
-        `uvm_field_int(reg_cpu_wr_data, UVM_DEFAULT)
-        `uvm_field_int(reg_cpu_rd_data, UVM_DEFAULT)
+        `uvm_field_int(reg_cpu_data_wr, UVM_DEFAULT)
+        `uvm_field_int(reg_cpu_data_rd, UVM_DEFAULT)
         `uvm_field_int(reg_cpu_we, UVM_DEFAULT)
         `uvm_field_int(reg_cpu_wack, UVM_DEFAULT)
         `uvm_field_int(reg_cpu_re, UVM_DEFAULT)

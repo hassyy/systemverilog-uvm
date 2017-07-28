@@ -4,6 +4,7 @@
 `include "common_header.svh"
 `include "dut_env.sv"
 `include "image_pipe_sequence_lib.sv"
+`include "dut_reg_block.sv"
 
 
 class base_test extends uvm_test;
@@ -11,6 +12,7 @@ class base_test extends uvm_test;
 
     dut_env env;
     uvm_table_printer printer;
+    dut_reg_block reg_block;
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -18,7 +20,15 @@ class base_test extends uvm_test;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
+
+        // Instantiate reg_block and set address map. 
+        reg_block = dut_reg_block::type_id::create("reg_block"); 
+        reg_block.build();
+
+        // Set the mapped reg_block to env.reg_block
         env = dut_env::type_id::create("env", this);
+        env.reg_block = reg_block;
+
         printer = new( );
         printer.knobs.depth = 5;
     endfunction: build_phase

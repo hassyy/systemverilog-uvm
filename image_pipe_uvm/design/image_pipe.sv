@@ -18,8 +18,8 @@ module image_pipe
     , output reg image_pipe_valid_out
     , output reg image_pipe_end_out
     , input wire image_pipe_busy_in
-    // U
-    , input wire reg_cpu_wacks
+    // REG_CPU
+    , input wire reg_cpu_cs
     , input wire [31:2] reg_cpu_addr
     , input wire [31:0] reg_cpu_data_wr
     , output reg [31:0] reg_cpu_data_rd
@@ -66,7 +66,7 @@ always @(posedge clk) begin
             end
             else
             if (image_pipe_valid_in) begin
-                image_pipe_data_out  <= image_pipe_data_in;
+                image_pipe_data_out  <= !image_pipe_data_in;
                 image_pipe_valid_out <= image_pipe_valid_in;
             end
             else begin

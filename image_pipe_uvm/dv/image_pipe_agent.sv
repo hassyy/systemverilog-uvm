@@ -21,7 +21,8 @@ class image_pipe_agent #(int DW_IN=32, int DW_OUT=32) extends uvm_agent;
 
     image_pipe_monitor#(DW_IN, DW_OUT) monitor;
 
-    `uvm_component_param_utils_begin(image_pipe_agent#(DW_IN, DW_OUT))
+    //`uvm_component_param_utils_begin(image_pipe_agent#(DW_IN, DW_OUT))
+    `uvm_component_param_utils_begin(image_pipe_agent)
         `uvm_field_enum(uvm_active_passive_enum, is_active, UVM_ALL_ON)
         `uvm_field_enum(uvm_active_passive_enum, is_busy_active, UVM_ALL_ON)
     `uvm_component_utils_end

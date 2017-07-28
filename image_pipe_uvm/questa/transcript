@@ -1,45 +1,16 @@
-# do run_win.do
-# ..
-# ../design
-# ../dv
-# ../test
-# ../interface
-# QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
-# Start time: 21:20:07 on Jul 24,2017
-# vlog ../dv/tb.sv -mfcu -suppress 2269 -suppress 2286 -suppress 2643 "+define+QUESTA" "+incdir+../design" "+incdir+../dv" "+incdir+../test" "+incdir+../interface" 
-# ** Error: ../dv/tb.sv(8): (vlog-13006) Could not find the package (image_pipe_pkg).  Design read will continue, but expect a cascade of errors after this failure.  Furthermore if you experience a vopt-7 error immediately before this error then please check the package names or the library search paths on the command line.
-# End time: 21:20:07 on Jul 24,2017, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0, Suppressed Warnings: 12
-# ** Error: C:/questasim64_10.6a/win64/vlog failed.
-# Error in macro ./run_win.do line 13
-# C:/questasim64_10.6a/win64/vlog failed.
-#     while executing
-# "vlog ../dv/tb.sv -mfcu -suppress 2269 -suppress 2286 -suppress 2643 +define+QUESTA +incdir+$DESIGN_PATH +incdir+$DV_PATH +incdir+$TEST_PATH +incdir+$I..."
-# ..
-# ../design
-# ../dv
-# ../test
-# ../interface
-# QuestaSim-64 vlog 10.6a Compiler 2017.03 Mar 16 2017
-# Start time: 21:20:41 on Jul 24,2017
-# vlog ../dv/tb.sv -mfcu -suppress 2269 -suppress 2286 -suppress 2643 "+define+QUESTA" "+incdir+../design" "+incdir+../dv" "+incdir+../test" "+incdir+../interface" 
-# -- Compiling package image_pipe_pkg
-# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
-# -- Compiling module tb
-# -- Importing package image_pipe_pkg
-# 
-# Top level modules:
-# 	tb
-# End time: 21:20:42 on Jul 24,2017, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 0, Suppressed Warnings: 12
-# vsim tb -voptargs=""+acc"" -classdebug -uvmcontrol=all "+UVM_OBJECTION_TRACE" "+UVM_TESTNAME=image_pipe_primary_test" 
-# Start time: 21:20:42 on Jul 24,2017
-# ** Note: (vsim-3812) Design is being optimized...
-# ** Error: ../dv/tb.sv(16): Module 'image_pipe_if' is not defined.
-# ** Error: ../dv/tb.sv(17): Module 'image_pipe_if' is not defined.
-# ** Error: ../dv/tb.sv(19): Module 'reg_cpu_if' is not defined.
-# ** Error: ../dv/tb.sv(21): Module 'image_pipe' is not defined.
-# Optimization failed
-# Error loading design
-# End time: 21:20:43 on Jul 24,2017, Elapsed time: 0:00:01
-# Errors: 4, Warnings: 0
+# //  Questa Sim-64
+# //  Version 10.6a win64 Mar 16 2017
+# //
+# //  Copyright 1991-2017 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# vsim.wlf opened as dataset "vsim"
+add wave -position insertpoint vsim:/tb/image_pipe_top/*
