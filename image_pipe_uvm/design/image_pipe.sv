@@ -1,14 +1,15 @@
 `ifndef __IMAGE_PIPE__
 `define __IMAGE_PIPE__
 
-`include "image_pipe_if.sv"
-`include "reg_cpu_if.sv"
+`include "../interface/image_pipe_if.sv"
+`include "../interface/reg_cpu_if.sv"
 
 module image_pipe
     #(parameter DW_IN=32, DW_OUT=32)
     (
     input wire clk
-    , input wire rst_n
+    , input wire s_rst_n
+    , input wire reg_cpu_rst_n
     // IMAGE_PIPE
     , input wire [DW_IN-1:0] image_pipe_data_in
     , input wire image_pipe_valid_in
@@ -36,7 +37,7 @@ logic [DW_IN-1:0] data_tmp;
 logic valid_tmp;
 
 always @(posedge clk) begin
-    if (!rst_n)
+    if (!s_rst_n)
         image_pipe_busy_out <= 1'b0;
     else begin
         if (image_pipe_busy_in)
@@ -50,7 +51,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-    if (!rst_n) begin
+    if (!s_rst_n) begin
         image_pipe_data_out  <= '0;
         image_pipe_valid_out <= '0;
     end
@@ -78,7 +79,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-    if (!rst_n)
+    if (!s_rst_n)
         image_pipe_end_out <= 1'b0;
     else begin
         if (image_pipe_end_out) begin
@@ -92,7 +93,7 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-    if (!rst_n) begin
+    if (!s_rst_n) begin
         data_tmp <= '0;
         valid_tmp <= 1'b0;
     end
@@ -132,7 +133,7 @@ end
 //  reg_mainpix : [READ_WRITE]
 
     always @ (posedge clk) begin
-        if (!rst_n) begin
+        if (!reg_cpu_rst_n) begin
             i_reg_1 <= DEFAULT_REG_1;
         end
         else
@@ -146,7 +147,7 @@ end
 //  reg_subpix : [READ_WRITE]
 
     always @ (posedge clk) begin
-        if (!rst_n) begin
+        if (!reg_cpu_rst_n) begin
             i_reg_2 <= DEFAULT_REG_2;
         end
         else
@@ -160,7 +161,7 @@ end
 //  WACK
 
     always @ (posedge clk) begin
-        if (!rst_n)
+        if (!reg_cpu_rst_n)
             reg_cpu_wack <= 1'b0;
         else if (reg_cpu_cs && reg_cpu_we)
             reg_cpu_wack <= 1'b1;
@@ -172,7 +173,7 @@ end
 //  RDACK
 
     always @ (posedge clk) begin
-        if (!rst_n)
+        if (!reg_cpu_rst_n)
             reg_cpu_rdv <= 1'b0;
         else
         // for NON-SRAM READ
@@ -186,7 +187,7 @@ end
 //  reg_cpu_re_rise_edge to latch reg_cpu_data_rd at the begining of read request
 
     always @ (posedge clk) begin
-        if (!rst_n)
+        if (!reg_cpu_rst_n)
             reg_cpu_re_ff1 <= 1'b0;
         else
             reg_cpu_re_ff1 <= reg_cpu_re;
@@ -198,7 +199,7 @@ end
 //  DATA READ
 
     always @ (posedge clk) begin
-        if (!rst_n)
+        if (!reg_cpu_rst_n)
             reg_cpu_data_rd <= 32'h00000000;
         else
         //  Latch reg_cpu_data_rd to avoid unexpected UBus Monitor Error

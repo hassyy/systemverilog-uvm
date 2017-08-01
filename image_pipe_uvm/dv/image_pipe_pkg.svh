@@ -8,6 +8,10 @@ package image_pipe_pkg;
     `include "define.svh"
     `include "image_pipe_define.svh"
 
+    `include "reset_transaction.sv"
+    `include "reset_driver.sv"
+    `include "reset_sequencer.sv"
+
     `include "image_pipe_data.sv"
     `include "image_pipe_driver.sv"
     `include "image_pipe_busy_driver.sv"
@@ -19,6 +23,10 @@ package image_pipe_pkg;
     `include "image_pipe_coverage.sv"
     `include "image_pipe_env.sv"
     `include "image_pipe_sequence_lib.sv"
+
+    `include "image_pipe_vsequence_base.sv"
+    `include "image_pipe_reg_cpu_simple_vsequence.sv"
+    `include "image_pipe_vsequencer.sv"
 
     `include "dut_reg_1_reg.sv"
     `include "dut_reg_2_reg.sv"

@@ -1,12 +1,13 @@
 `ifndef __TB__
 `define __TB__
 
-`include "image_pipe_pkg.svh"
+`include "../dv/image_pipe_pkg.svh"
 
-`include "image_pipe_if.sv"
-`include "reg_cpu_if.sv"
+`include "../interface/image_pipe_if.sv"
+`include "../interface/reg_cpu_if.sv"
+`include "../interface/reset_if.sv"
 
-`include "image_pipe.sv"
+`include "../design/image_pipe.sv"
 
 module tb;
     import uvm_pkg::*;
@@ -15,16 +16,16 @@ module tb;
     bit clk;
     bit rst_n;
 
-    // image_pipe_if #(.DW_IN(DW_IN), .DW_OUT(DW_OUT)) ivif(.clk(clk), .rst_n(rst_n));
-    // image_pipe_if #(.DW_IN(DW_IN), .DW_OUT(DW_OUT)) ovif(.clk(clk), .rst_n(rst_n));
     image_pipe_if ivif(.clk(clk), .rst_n(rst_n));
     image_pipe_if ovif(.clk(clk), .rst_n(rst_n));
-
     reg_cpu_if reg_if(.reg_cpu_clk(clk), .rst_n(rst_n));
+    reset_if reset_if(.clk(clk));
 
     image_pipe image_pipe_top(
         .clk(clk)
-        , .rst_n(rst_n)
+//         , .rst_n(rst_n)
+        , .s_rst_n(reset_if.s_rst_n)
+        , .reg_cpu_rst_n(reset_if.reg_cpu_rst_n)
 
         // Connection between DUT and TB must be the vif without clocking block.
         // Or clocking skews are not applied to DUT.
@@ -68,14 +69,13 @@ module tb;
             rst_gen();
             clk_gen();
 
-            // Configure virtual interface by uvm_config_db
-            // For ipsbus
+            // Configure virtual interface, which will assign actual interface to that of virtual
+            // Or, you'll have NOVIF error (e.g. in each driver).
             uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get(), "*.agent.*", "in_intf", ivif);
             uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get(), "*.agent.*", "out_intf", ovif);
-            // For monitor
             uvm_config_db#(virtual image_pipe_if)::set(uvm_root::get(), "*.monitor", "monitor_intf", ovif);
-            // For register
             uvm_config_db#(virtual reg_cpu_if)::set(uvm_root::get(), "*.agent.*", "mst_intf", reg_if);
+            uvm_config_db#(virtual reset_if)::set(uvm_root::get(), "*.reset_agt.*", "reset_if", reset_if);
 
             // UVM start test.
             run_test();

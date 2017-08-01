@@ -7,6 +7,7 @@
 `include "../dv/image_pipe_busy_sequence_lib.sv"
 `include "../dv/image_pipe_data.sv"
 `include "../dv/test_lib.sv"
+`include "../dv/reg_cpu_sequence_lib.sv"
 
 class image_pipe_data_random_timing extends image_pipe_data#(`IMAGE_PIPE_DW_IN1,`IMAGE_PIPE_DW_OUT1);
 
@@ -48,22 +49,27 @@ class image_pipe_primary_test extends base_test;
 
     virtual task run_phase(uvm_phase phase);
 
-        image_pipe_simple_sequence seq;
-        normal_busy_sequence busy_seq;
+        // Declare the sequence to use in your test.
+        image_pipe_reg_cpu_simple_vsequence v_seq;
 
         super.run_phase(phase);
 
+        // Set flag for timeout.
         phase.raise_objection(this);
-        seq = image_pipe_simple_sequence::type_id::create("seq");
-        busy_seq = normal_busy_sequence::type_id::create("busy_seq");
 
-        assert(seq.randomize());
-        fork
-            seq.start(env.penv_in.agent.sequencer);
-            busy_seq.start(env.penv_out.agent.busy_sequencer);
-        join_any
+        // Instantiate virtual sequencer.
+        v_seq = image_pipe_reg_cpu_simple_vsequence::type_id::create("v_seq");
 
+        // Instantiate v_seq.reg_cpu_seq here to assign reg_block.
+        v_seq.reg_cpu_seq = reg_cpu_normal_sequence::type_id::create("reg_cpu_seq");
+        v_seq.reg_cpu_seq.model = reg_block;  // for RAL
+
+        // Start senario:
+        v_seq.start(env.v_seqr);
+
+        // Reset flag for timeout.
         phase.drop_objection(this);
+
     endtask
 endclass: image_pipe_primary_test
 

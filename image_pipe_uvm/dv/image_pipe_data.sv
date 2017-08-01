@@ -1,5 +1,5 @@
 `ifndef __IMAGE_DATA__
-    `define __IMAGE_DATA__
+`define __IMAGE_DATA__
 
 `include "common_header.svh"
 

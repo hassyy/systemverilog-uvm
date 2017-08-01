@@ -10,8 +10,12 @@ set DV_PATH $PATH_TO_ROOT_DIR/dv
 set TEST_PATH $PATH_TO_ROOT_DIR/test
 set INTERFACE_PATH $PATH_TO_ROOT_DIR/interface
 
-vlog ../dv/tb.sv ../design/image_pipe.sv \
-    -mfcu\
+## For vlog, you must specify the .v files that are not included.
+## e.g.) testbench, design, etc.
+
+vlog ../dv/tb.sv \
+     ../design/image_pipe.sv \
+    -mfcu \
     -suppress 2269 -suppress 2286 -suppress 2643 \
     +define+QUESTA \
     +incdir+$DESIGN_PATH \

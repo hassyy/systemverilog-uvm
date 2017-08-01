@@ -1,5 +1,5 @@
 `ifndef __REG_CPU_SEQUENCER__
-    `define __REG_CPU_SEQUENCER__
+`define __REG_CPU_SEQUENCER__
 
 `include "common_header.svh"
 `include "reg_cpu_data.sv"

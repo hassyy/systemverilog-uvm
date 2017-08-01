@@ -17,7 +17,10 @@ class image_pipe_simple_sequence extends uvm_sequence #(image_pipe_data#());
     endfunction: new
 
     // IMAGE_PIPE sequence HERE:
-    virtual task body( );
+    virtual task body();
+
+        `uvm_info(get_full_name, "START body()", UVM_LOW)
+
         for(int i=0; i<loop; i++) begin
             if (i==loop-1) begin
                 `uvm_do_with(req, {

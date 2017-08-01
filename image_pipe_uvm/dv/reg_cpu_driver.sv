@@ -50,7 +50,7 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
     endtask: reset
 
 
-    // FYI) "req" is declared in uvm_driver.
+            // FYI) "req" is declared in uvm_driver.
     // Use only "req" for both get_next_item() and item_done()
     // I dont know how to use rsp for item_done()...
     virtual task get_and_drive();
@@ -69,6 +69,9 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
 
         // Wait during reset
         @(posedge vif.cb_tb iff(vif.rst_n != `RESET_ACTIVE));
+
+        if (req.first_flag)
+            repeat(req.wait_before_start) @(posedge vif.cb_tb);
 
         // Decode cmd_type
         case (req.reg_cpu_cmd)
@@ -119,7 +122,7 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
         vif.cb_tb.reg_cpu_re   <= '0;
 
         // Set retuen value for sequencer.
-        req.reg_cpu_data_rd = vif.cb_tb.reg_cpu_data_rd; 
+        req.reg_cpu_data_rd = vif.cb_tb.reg_cpu_data_rd;
         @(posedge vif.cb_tb);
 
     endtask: read

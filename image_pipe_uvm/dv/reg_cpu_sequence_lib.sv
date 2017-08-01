@@ -5,7 +5,7 @@
 `include "dut_reg_block.sv"
 
 
-class reg_cpu_normal_sequence extends uvm_reg_sequence;
+class reg_cpu_normal_sequence extends uvm_reg_sequence#();
 
     // Mandatory: Fatory registration
     `uvm_object_param_utils(reg_cpu_normal_sequence)
@@ -31,10 +31,10 @@ class reg_cpu_normal_sequence extends uvm_reg_sequence;
         // Prepare built-in "model" as "reg_block".
         // FYI) "model" is declared in uvm_reg_sequence and
         //      used for the register block abstraction.
-        $cast(reg_block, model); 
+        $cast(reg_block, model);
 
 
-        //------ Register senario 
+        //------ Register senario
         // Do write, Read by calling RAL API.
         write_reg(reg_block.reg_1, status, 32'hFFFF);
         read_reg(reg_block.reg_1, status, value);
