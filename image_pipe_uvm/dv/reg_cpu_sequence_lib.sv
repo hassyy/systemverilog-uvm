@@ -1,7 +1,7 @@
 `ifndef __REG_CPU_SEQUENCE_LIB__
 `define __REG_CPU_SEQUENCE_LIB__
 
-`include "common_header.svh"
+`include "reg_cpu_common.svh"
 `include "dut_reg_block.sv"
 
 

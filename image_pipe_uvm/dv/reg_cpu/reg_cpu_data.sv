@@ -1,7 +1,8 @@
 `ifndef __REG_CPU_DATA__
-    `define __REG_CPU_DATA__
+`define __REG_CPU_DATA__
 
-`include "common_header.svh"
+`include "reg_cpu_common.svh"
+
 
 class reg_cpu_data #(int AW=32, int DW=32) extends uvm_sequence_item;
 

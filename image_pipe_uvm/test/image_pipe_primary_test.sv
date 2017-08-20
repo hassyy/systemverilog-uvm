@@ -1,13 +1,12 @@
 `ifndef __IMAGE_PIPE_PRIMARY_TEST__
-    `define __IMAGE_PIPE_PRIMARY_TEST__
+`define __IMAGE_PIPE_PRIMARY_TEST__
 
 `include "../dv/common_header.svh"
 `include "../dv/define.svh"
-`include "../dv/image_pipe_sequence_lib.sv"
-`include "../dv/image_pipe_busy_sequence_lib.sv"
-`include "../dv/image_pipe_data.sv"
 `include "../dv/test_lib.sv"
+`include "../dv/image_pipe_data.sv"
 `include "../dv/reg_cpu_sequence_lib.sv"
+`include "../dv/image_pipe_reg_cpu_simple_vsequence.sv"
 
 class image_pipe_data_random_timing extends image_pipe_data#(`IMAGE_PIPE_DW_IN1,`IMAGE_PIPE_DW_OUT1);
 
@@ -37,6 +36,8 @@ endclass
 class image_pipe_primary_test extends base_test;
     `uvm_component_utils(image_pipe_primary_test)
 
+
+
     function new(string name, uvm_component parent);
         super.new(name, parent);
     endfunction : new
@@ -44,13 +45,13 @@ class image_pipe_primary_test extends base_test;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         // Factory override for the image_pipe timing parameter
-        image_pipe_data#()::type_id::set_type_override(image_pipe_data_random_timing::get_type());
+        image_pipe_data#(DW_IN, DW_OUT)::type_id::set_type_override(image_pipe_data_random_timing::get_type());
     endfunction : build_phase
 
     virtual task run_phase(uvm_phase phase);
 
         // Declare the sequence to use in your test.
-        image_pipe_reg_cpu_simple_vsequence v_seq;
+        image_pipe_reg_cpu_simple_vsequence#(DW_IN, DW_OUT) v_seq;
 
         super.run_phase(phase);
 
@@ -58,7 +59,7 @@ class image_pipe_primary_test extends base_test;
         phase.raise_objection(this);
 
         // Instantiate virtual sequencer.
-        v_seq = image_pipe_reg_cpu_simple_vsequence::type_id::create("v_seq");
+        v_seq = image_pipe_reg_cpu_simple_vsequence#(DW_IN, DW_OUT)::type_id::create("v_seq");
 
         // Instantiate v_seq.reg_cpu_seq here to assign reg_block.
         v_seq.reg_cpu_seq = reg_cpu_normal_sequence::type_id::create("reg_cpu_seq");

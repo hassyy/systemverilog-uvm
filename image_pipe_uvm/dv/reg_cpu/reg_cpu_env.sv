@@ -1,7 +1,7 @@
 `ifndef __REG_CPU_ENV__
 `define __REG_CPU_ENV__
 
-`include "common_header.svh"
+`include "reg_cpu_common.svh"
 `include "reg_cpu_agent.sv"
 `include "reg_cpu_reg_predictor.sv"
 

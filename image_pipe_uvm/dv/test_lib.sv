@@ -2,6 +2,7 @@
     `define __TEST_LIB__
 
 `include "common_header.svh"
+`include "define.svh"
 `include "dut_env.sv"
 `include "image_pipe_sequence_lib.sv"
 `include "dut_reg_block.sv"
@@ -9,6 +10,9 @@
 
 class base_test extends uvm_test;
     `uvm_component_utils(base_test)
+
+    localparam DW_IN = `IMAGE_PIPE_DW_IN1;
+    localparam DW_OUT = `IMAGE_PIPE_DW_OUT1;
 
     dut_env env;
     uvm_table_printer printer;
@@ -21,8 +25,8 @@ class base_test extends uvm_test;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
 
-        // Instantiate reg_block and set address map. 
-        reg_block = dut_reg_block::type_id::create("reg_block"); 
+        // Instantiate reg_block and set address map.
+        reg_block = dut_reg_block::type_id::create("reg_block");
         reg_block.build();
 
         // Set the mapped reg_block to env.reg_block

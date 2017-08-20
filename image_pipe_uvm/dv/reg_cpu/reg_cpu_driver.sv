@@ -1,8 +1,7 @@
 `ifndef __REG_CPU_DRIVER__
     `define __REG_CPU_DRIVER__
 
-`include "common_header.svh"
-`include "define.svh"
+`include "reg_cpu_common.svh"
 `include "reg_cpu_data.sv"
 
 // FYI) uvm_driver #(REQ, RESP=REQ)
@@ -56,7 +55,7 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
     virtual task get_and_drive();
         forever begin
             @(posedge vif.rst_n);
-            while (vif.rst_n != `RESET_ACTIVE) begin
+            while (vif.rst_n != `REG_CPU_RESET_ACTIVE) begin
                 seq_item_port.get_next_item(req);
                 drive_sig();
                 seq_item_port.item_done(req);
@@ -68,7 +67,7 @@ class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
     virtual task drive_sig();
 
         // Wait during reset
-        @(posedge vif.cb_tb iff(vif.rst_n != `RESET_ACTIVE));
+        @(posedge vif.cb_tb iff(vif.rst_n != `REG_CPU_RESET_ACTIVE));
 
         if (req.first_flag)
             repeat(req.wait_before_start) @(posedge vif.cb_tb);

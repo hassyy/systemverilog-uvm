@@ -1,13 +1,14 @@
 `ifndef __IMAGE_PIPE_BUSY_SEQUENCE_LIB__
     `define __IMAGE_PIPE_BUSY_SEQUENCE_LIB__
 
-`include "common_header.svh"
+`include "image_pipe_pkg.svh"
 `include "image_pipe_data.sv"
 
-class image_pipe_normal_busy_sequence extends uvm_sequence #(image_pipe_data#());
+class image_pipe_normal_busy_sequence#(int DW_IN, int DW_OUT)
+    extends uvm_sequence #(image_pipe_data#(DW_IN, DW_OUT));
 
     // Factory registration
-    `uvm_object_param_utils(image_pipe_normal_busy_sequence)
+    `uvm_object_param_utils(image_pipe_normal_busy_sequence#(DW_IN, DW_OUT))
 
     // Need to declare new here.
     function new(string name = "image_pipe_normal_busy_sequence");

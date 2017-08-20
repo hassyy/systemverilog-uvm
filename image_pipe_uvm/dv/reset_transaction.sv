@@ -40,6 +40,15 @@ class reset_transaction extends uvm_sequence_item;
         super.new(name);
     endfunction: new
 
+    virtual function display();
+        `uvm_info(
+            get_name
+            , $sformatf("RESET_TXN: reset_data=%x, wait_before_reset=%x, reset_cycle=%x"
+                , reset_data, wait_before_reset, reset_cycle)
+            , UVM_LOW
+            )
+    endfunction
+
 endclass: reset_transaction
 
 `endif

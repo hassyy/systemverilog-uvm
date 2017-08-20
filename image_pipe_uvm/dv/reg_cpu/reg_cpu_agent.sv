@@ -1,7 +1,8 @@
 `ifndef __REG_CPU_AGENT__
 `define __REG_CPU_AGENT__
 
-`include "common_header.svh"
+`include "reg_cpu_common.svh"
+
 `include "reg_cpu_data.sv"
 `include "reg_cpu_sequencer.sv"
 `include "reg_cpu_driver.sv"

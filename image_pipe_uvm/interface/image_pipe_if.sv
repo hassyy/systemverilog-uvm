@@ -26,6 +26,15 @@ interface image_pipe_if
         input im_data_out, im_valid_out, im_end_out, is_busy_out;
     endclocking
 
+
+    clocking cb_mon @(posedge clk);
+        default input #INPUT_SKEW output #OUTPUT_SKEW;
+
+        // All ports as input for monitor
+        input is_data_in, is_valid_in, is_end_in, im_busy_in
+              , im_data_out, im_valid_out, im_end_out, is_busy_out;
+    endclocking
+
 endinterface: image_pipe_if
 
 `endif

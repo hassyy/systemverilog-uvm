@@ -16,10 +16,10 @@ class reset_sequence extends uvm_sequence #(reset_transaction);
 
     virtual task body();
         // For PRE_RESET
-        `uvm_do_with(req, {reset_data==!`RESET_ACTIVE;})
+        `uvm_do_with(req, {reset_data==`RESET_INACTIVE;})
         // For RESET
         `uvm_do_with(req, {reset_data==`RESET_ACTIVE;})
-        `uvm_do_with(req, {reset_data==!`RESET_ACTIVE;})
+        `uvm_do_with(req, {reset_data==`RESET_INACTIVE;})
     endtask;
 
 

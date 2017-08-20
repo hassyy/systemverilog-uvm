@@ -3,9 +3,10 @@
 
 `include "../interface/image_pipe_if.sv"
 `include "../interface/reg_cpu_if.sv"
+`include "../dv/define.svh"
 
 module image_pipe
-    #(parameter DW_IN=32, DW_OUT=32)
+    #(parameter DW_IN=`IMAGE_PIPE_DW_IN1, DW_OUT=`IMAGE_PIPE_DW_OUT1)
     (
     input wire clk
     , input wire s_rst_n
@@ -56,24 +57,9 @@ always @(posedge clk) begin
         image_pipe_valid_out <= '0;
     end
     else begin
-        if (image_pipe_busy_in) begin
-            // hold
-        end
-        else
         if (!image_pipe_busy_in) begin
-            if (valid_tmp) begin
-                image_pipe_data_out <= data_tmp;
-                image_pipe_valid_out <= valid_tmp;
-            end
-            else
-            if (image_pipe_valid_in) begin
-                image_pipe_data_out  <= !image_pipe_data_in;
-                image_pipe_valid_out <= image_pipe_valid_in;
-            end
-            else begin
-                image_pipe_data_out  <= '0;
-                image_pipe_valid_out <= 1'b0;
-            end
+            image_pipe_data_out <= data_tmp;
+            image_pipe_valid_out <= valid_tmp;
         end
     end
 end
@@ -98,11 +84,12 @@ always @(posedge clk) begin
         valid_tmp <= 1'b0;
     end
     else begin
-        if (valid_tmp)
+        if (valid_tmp) begin
             if (!image_pipe_busy_in)
                 valid_tmp <= 1'b0;
+        end
         else
-        if (image_pipe_valid_in & image_pipe_busy_in) begin
+        if (image_pipe_valid_in & !image_pipe_busy_in) begin
             data_tmp <= image_pipe_data_in;
             valid_tmp <= image_pipe_valid_in;
         end
@@ -113,7 +100,7 @@ end
 
 
 
-////////// U
+////////// REG_CPU
 
     reg [12: 0] i_reg_1;
     reg [15: 0] i_reg_2;

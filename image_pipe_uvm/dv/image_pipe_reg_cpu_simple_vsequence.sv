@@ -8,15 +8,15 @@
 `include "reg_cpu_sequence_lib.sv"
 `include "reset_sequence.sv"
 
-class image_pipe_reg_cpu_simple_vsequence extends image_pipe_vsequence_base;
+class image_pipe_reg_cpu_simple_vsequence#(int DW_IN, int DW_OUT) extends image_pipe_vsequence_base#(DW_IN, DW_OUT);
 
     // Mandatory: Factory registration
-    `uvm_object_utils(image_pipe_reg_cpu_simple_vsequence)
+    `uvm_object_utils(image_pipe_reg_cpu_simple_vsequence#(DW_IN, DW_OUT))
 
     // Handle for target sequencers
     // Declare sequences to use for your virtual sequence
-    image_pipe_simple_sequence image_pipe_seq;
-    image_pipe_normal_busy_sequence image_pipe_busy_seq;
+    image_pipe_simple_sequence#(DW_IN, DW_OUT) image_pipe_seq;
+    image_pipe_normal_busy_sequence#(DW_IN, DW_OUT) image_pipe_busy_seq;
     reg_cpu_normal_sequence reg_cpu_seq;
     reset_sequence reset_seq;
 
@@ -35,8 +35,8 @@ class image_pipe_reg_cpu_simple_vsequence extends image_pipe_vsequence_base;
 
         // Instanciate seqeucnes by Factory method.
         reset_seq = reset_sequence::type_id::create("reset_seq");
-        image_pipe_seq = image_pipe_simple_sequence::type_id::create("image_pipe_seq");
-        image_pipe_busy_seq = image_pipe_normal_busy_sequence::type_id::create("image_pipe_busy_seq");
+        image_pipe_seq = image_pipe_simple_sequence#(DW_IN, DW_OUT)::type_id::create("image_pipe_seq");
+        image_pipe_busy_seq = image_pipe_normal_busy_sequence#(DW_IN, DW_OUT)::type_id::create("image_pipe_busy_seq");
         if (reg_cpu_seq==null)
             reg_cpu_seq = reg_cpu_normal_sequence::type_id::create("reg_cpu_seq");
         else

@@ -8,20 +8,20 @@
 `include "reg_cpu_sequencer.sv"
 `include "reset_sequencer.sv"
 
-class image_pipe_vsequence_base extends uvm_sequence#();
+class image_pipe_vsequence_base#(int DW_IN, int DW_OUT) extends uvm_sequence#();
 
     // Mandatory: Factory registration
-    `uvm_object_utils(image_pipe_vsequence_base)
+    `uvm_object_utils(image_pipe_vsequence_base#(DW_IN, DW_OUT))
 
     // Create handle for virtual sequencer with UVM MACRO
     // You can point this virtual sequencer via p_sequencer in inherited class.
     //`uvm_declare_p_sequencer(image_pipe_vsequencer)
 
-    image_pipe_vsequencer v_seqr;
+    image_pipe_vsequencer#(DW_IN, DW_OUT) v_seqr;
 
     // Handle for target sequencers
-    image_pipe_sequencer#() image_pipe_seqr;
-    image_pipe_busy_sequencer image_pipe_busy_seqr;
+    image_pipe_sequencer#(DW_IN, DW_OUT) image_pipe_seqr;
+    image_pipe_busy_sequencer#(DW_IN, DW_OUT) image_pipe_busy_seqr;
     reg_cpu_sequencer reg_cpu_seqr;
     reset_sequencer reset_seqr;
 

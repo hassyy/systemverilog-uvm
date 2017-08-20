@@ -27,45 +27,52 @@ class reset_driver extends uvm_driver #(reset_transaction);
     endfunction: build_phase
 
 
+    // We use pre_reset/reset/post_reset_phase for reset_driver
     task pre_reset_phase(uvm_phase phase);
+        `uvm_info(get_name(), "PRE_RESET_PHASE() STARTED", UVM_LOW)
         phase.raise_objection(this);
 
-        `uvm_info(get_name(), "PRE_RESET_PHASE() STARTED", UVM_LOW)
         seq_item_port.get_next_item(req);
         drive_sig();
         `uvm_info(get_name(), $sformatf("wait_before_reset:%d", req.wait_before_reset), UVM_LOW)
         repeat(req.wait_before_reset) @reset_vif.cb_tb;
         seq_item_port.item_done();
-        `uvm_info(get_name(), "PRE_RESET_PHASE() DONE", UVM_LOW)
 
         phase.drop_objection(this);
+        `uvm_info(get_name(), "PRE_RESET_PHASE() DONE", UVM_LOW)
     endtask: pre_reset_phase
 
 
     task reset_phase(uvm_phase phase);
+        `uvm_info(get_name(), "RESET_PHASE() STARTED", UVM_LOW)
         phase.raise_objection(this);
 
-        `uvm_info(get_name(), "RESET_PHASE() STARTED", UVM_LOW)
         seq_item_port.get_next_item(req);
         drive_sig();
         repeat(req.reset_cycle) @reset_vif.cb_tb;
         seq_item_port.item_done();
-        `uvm_info(get_name(), "RESET_PHASE() DONE", UVM_LOW)
 
         phase.drop_objection(this);
+        `uvm_info(get_name(), "RESET_PHASE() DONE", UVM_LOW)
     endtask: reset_phase
 
+
     task post_reset_phase(uvm_phase phase);
+        `uvm_info(get_name(), "POST_RESET_PHASE() STARTED", UVM_LOW)
         phase.raise_objection(this);
+
         seq_item_port.get_next_item(req);
         drive_sig();
         @reset_vif.cb_tb;
         seq_item_port.item_done();
+
         phase.drop_objection(this);
+        `uvm_info(get_name(), "RESET_PHASE() DONE", UVM_LOW)
     endtask: post_reset_phase
 
+
     task drive_sig();
-        `uvm_info(get_name(), $sformatf("drive_sig(): %d", req.reset_data), UVM_LOW)
+        req.display();
         reset_vif.cb_tb.s_rst_n       <= req.reset_data;
         reset_vif.cb_tb.reg_cpu_rst_n <= req.reset_data;
     endtask: drive_sig

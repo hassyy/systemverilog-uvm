@@ -1,0 +1,13 @@
+`ifndef __REG_CPU_DEFINE__
+`define __REG_CPU_DEFINE__
+
+    `define REG_CPU_RESET_ACTIVE 1'b0
+    `define REG_CPU_RESET_INACTIVE !`REG_CPU_RESET_ACTIVE
+
+    `define REG_CPU_VALID_ACTIVE 1'b1
+    `define REG_CPU_VALID_INACTIVE !`REG_CPU_VALID_ACTIVE
+
+    `define REG_CPU_BUSY_ACTIVE  1'b1
+    `define REG_CPU_BUSY_INACTIVE  !`REG_CPU_BUSY_ACTIVE
+
+`endif
