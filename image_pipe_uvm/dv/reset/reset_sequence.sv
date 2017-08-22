@@ -1,7 +1,7 @@
 `ifndef __RESET_SEQUENCE__
 `define __RESET_SEQUENCE__
 
-`include "define.svh"
+`include "reset_common.svh"
 `include "reset_transaction.sv"
 
 class reset_sequence extends uvm_sequence #(reset_transaction);
@@ -16,10 +16,10 @@ class reset_sequence extends uvm_sequence #(reset_transaction);
 
     virtual task body();
         // For PRE_RESET
-        `uvm_do_with(req, {reset_data==`RESET_INACTIVE;})
+        `uvm_do_with(req, {reset_data==`RESET_RESET_INACTIVE;})
         // For RESET
-        `uvm_do_with(req, {reset_data==`RESET_ACTIVE;})
-        `uvm_do_with(req, {reset_data==`RESET_INACTIVE;})
+        `uvm_do_with(req, {reset_data==`RESET_RESET_ACTIVE;})
+        `uvm_do_with(req, {reset_data==`RESET_RESET_INACTIVE;})
     endtask;
 
 

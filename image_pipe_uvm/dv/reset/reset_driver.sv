@@ -1,8 +1,7 @@
 `ifndef __RESET_DRIVER__
     `define __RESET_DRIVER__
 
-`include "common_header.svh"
-`include "define.svh"
+`include "reset_common.svh"
 `include "reset_transaction.sv"
 
 // FYI) uvm_driver #(REQ, RESP=REQ)

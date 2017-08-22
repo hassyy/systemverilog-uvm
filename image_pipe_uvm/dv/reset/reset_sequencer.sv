@@ -1,7 +1,7 @@
 `ifndef __RESET_SEQUENCER__
 `define __RESET_SEQUENCER__
 
-`include "common_header.svh"
+`include "reset_common.svh"
 `include "reset_transaction.sv"
 
 

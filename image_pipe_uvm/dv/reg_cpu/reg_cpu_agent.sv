@@ -6,14 +6,14 @@
 `include "reg_cpu_data.sv"
 `include "reg_cpu_sequencer.sv"
 `include "reg_cpu_driver.sv"
-`include "dut_reg_adapter.sv"
+// `include "dut_reg_adapter.sv"
 
-class reg_cpu_agent extends uvm_agent;
-    `uvm_component_utils(reg_cpu_agent)
+class reg_cpu_agent#(int AW, int DW) extends uvm_agent;
+    `uvm_component_utils(reg_cpu_agent#(AW, DW))
 
     reg_cpu_sequencer sequencer;
-    reg_cpu_driver driver;
-    dut_reg_adapter adapter;
+    reg_cpu_driver#(AW, DW) driver;
+    // dut_reg_adapter adapter;
 
     //reg_cpu_monitor() monitor;  // TODO
 
@@ -26,8 +26,8 @@ class reg_cpu_agent extends uvm_agent;
 
 
         sequencer = reg_cpu_sequencer::type_id::create(.name("sequencer"), .parent(this));
-        driver = reg_cpu_driver::type_id::create(.name("driver"), .parent(this));
-        adapter = dut_reg_adapter::type_id::create(.name("adapter"), .parent(this));
+        driver = reg_cpu_driver#(AW, DW)::type_id::create(.name("driver"), .parent(this));
+        // adapter = dut_reg_adapter::type_id::create(.name("adapter"), .parent(this));
 
         `uvm_info(get_full_name(), "BUILD_PHASE_DONE", UVM_LOW)
     endfunction: build_phase

@@ -5,9 +5,9 @@
 `include "reg_cpu_data.sv"
 
 // FYI) uvm_driver #(REQ, RESP=REQ)
-class reg_cpu_driver extends uvm_driver #(reg_cpu_data#());
+class reg_cpu_driver#(int DW, int AW) extends uvm_driver #(reg_cpu_data#(DW, AW));
 
-    `uvm_component_param_utils(reg_cpu_driver)
+    `uvm_component_param_utils(reg_cpu_driver#(AW, DW))
 
     // Declare vif to drive signals
     virtual reg_cpu_if vif;

@@ -1,13 +1,13 @@
-`ifndef __DUT_REG_ADAPTER__
-`define __DUT_REG_ADAPTER__
+`ifndef __REG_CPU_REG_ADAPTER__
+`define __REG_CPU_REG_ADAPTER__
 
-`include "common_header.svh"
+`include "reg_cpu_common.svh"
 `include "reg_cpu_data.sv"
 
-class dut_reg_adapter extends uvm_reg_adapter;
+class reg_cpu_reg_adapter extends uvm_reg_adapter;
 
     // Mandatory: Factory registration
-    `uvm_object_utils(dut_reg_adapter)
+    `uvm_object_utils(reg_cpu_reg_adapter)
 
     rand bit first_flag;
 
@@ -77,6 +77,6 @@ class dut_reg_adapter extends uvm_reg_adapter;
         rw.status = UVM_IS_OK;
     endfunction: bus2reg
 
-endclass: dut_reg_adapter
+endclass: reg_cpu_reg_adapter
 
 `endif

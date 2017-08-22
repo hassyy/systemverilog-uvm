@@ -1,9 +1,7 @@
 `ifndef __RESET_TRANSACTION__
 `define __RESET_TRANSACTION__
 
-`include "common_header.svh"
-`include "define.svh"
-
+`include "reset_common.svh"
 
 class reset_transaction extends uvm_sequence_item;
 
@@ -21,7 +19,7 @@ class reset_transaction extends uvm_sequence_item;
 
     // Default constraint
     constraint ct_default_data {
-        soft reset_data==!`RESET_ACTIVE;
+        soft reset_data==!`RESET_RESET_ACTIVE;
     }
 
     constraint ct_default_timing {
