@@ -1,12 +1,7 @@
 `ifndef __IMAGE_PIPE_REG_CPU_SIMPLE_VSEQUENCE__
 `define __IMAGE_PIPE_REG_CPU_SIMPLE_VSEQUENCE__
 
-`include "common_header.svh"
-`include "image_pipe_vsequence_base.sv"
-`include "image_pipe_sequence_lib.sv"
-`include "image_pipe_busy_sequence_lib.sv"
-`include "reg_cpu_sequence_lib.sv"
-`include "reset_sequence.sv"
+`include "sequence_common.svh"
 
 class image_pipe_reg_cpu_simple_vsequence#(int DW_IN, int DW_OUT) extends image_pipe_vsequence_base#(DW_IN, DW_OUT);
 

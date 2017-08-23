@@ -8,22 +8,22 @@ interface image_pipe_if
         , parameter OUTPUT_SKEW=1ns)
     (input logic clk, rst_n);
 
-    logic [DW_IN-1:0]  is_data_in;
-    logic              is_valid_in;
-    logic              is_end_in;
-    logic              is_busy_out;
-    logic [DW_OUT-1:0] im_data_out;
-    logic              im_valid_out;
-    logic              im_end_out;
-    logic              im_busy_in;
+    logic [DW_IN-1:0]  image_pipe_data_in;
+    logic              image_pipe_valid_in;
+    logic              image_pipe_end_in;
+    logic              image_pipe_busy_out;
+    logic [DW_OUT-1:0] ipm_data_out;
+    logic              ipm_valid_out;
+    logic              ipm_end_out;
+    logic              ipm_busy_in;
 
     clocking cb_tb @(posedge clk);
         default input #INPUT_SKEW output #OUTPUT_SKEW;
 
         // output: drived from TB (by drivers)
-        output is_data_in, is_valid_in, is_end_in, im_busy_in;
+        output image_pipe_data_in, image_pipe_valid_in, image_pipe_end_in, ipm_busy_in;
         // input: observed from TB (by monitors)
-        input im_data_out, im_valid_out, im_end_out, is_busy_out;
+        input ipm_data_out, ipm_valid_out, ipm_end_out, image_pipe_busy_out;
     endclocking
 
 
@@ -31,8 +31,8 @@ interface image_pipe_if
         default input #INPUT_SKEW output #OUTPUT_SKEW;
 
         // All ports as input for monitor
-        input is_data_in, is_valid_in, is_end_in, im_busy_in
-              , im_data_out, im_valid_out, im_end_out, is_busy_out;
+        input image_pipe_data_in, image_pipe_valid_in, image_pipe_end_in, ipm_busy_in
+              , ipm_data_out, ipm_valid_out, ipm_end_out, image_pipe_busy_out;
     endclocking
 
 endinterface: image_pipe_if

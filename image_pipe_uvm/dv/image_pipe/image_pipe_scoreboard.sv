@@ -64,12 +64,12 @@ class image_pipe_scoreboard#(int DW_IN=32, int DW_OUT=32) extends uvm_scoreboard
     virtual task compare_data();
 
         num_compare++;
-        if (in_data.is_data_in != out_data.im_data_out)
+        if (in_data.image_pipe_data_in != out_data.ipm_data_out)
             `uvm_error(
                 //get_type_name()
                 get_name()
                 , $sformatf("[COMPARE_ERROR] actual=%0h, expected=%0h"
-                , out_data.im_data_out, in_data.is_data_in)
+                , out_data.ipm_data_out, in_data.image_pipe_data_in)
             )
         else
             num_compare_ok++;

@@ -7,14 +7,14 @@ import uvm_pkg::*;
 
 class image_pipe_data #(int DW_IN, int DW_OUT) extends uvm_sequence_item;
 
-    rand bit [DW_IN-1:0] is_data_in;
-    rand bit        is_valid_in;
-    rand bit        is_end_in;
-    rand bit        is_busy_out;
-    rand bit [DW_OUT-1:0] im_data_out;
-    rand bit        im_valid_out;
-    rand bit        im_end_out;
-    rand bit        im_busy_in;
+    rand bit [DW_IN-1:0] image_pipe_data_in;
+    rand bit        image_pipe_valid_in;
+    rand bit        image_pipe_end_in;
+    rand bit        image_pipe_busy_out;
+    rand bit [DW_OUT-1:0] ipm_data_out;
+    rand bit        ipm_valid_out;
+    rand bit        ipm_end_out;
+    rand bit        ipm_busy_in;
 
     // Control Parameter
     rand bit first_data_flag;
@@ -32,10 +32,10 @@ class image_pipe_data #(int DW_IN, int DW_OUT) extends uvm_sequence_item;
 
 
     // Default constraint
-    constraint ct_default_image_pipe {
-        soft is_valid_in==0;
-        soft is_end_in==0;
-        soft is_busy_out==0;
+    constraint ct_default_ips {
+        soft image_pipe_valid_in==0;
+        soft image_pipe_end_in==0;
+        soft image_pipe_busy_out==0;
     }
 
     constraint ct_default_flag {
@@ -54,14 +54,14 @@ class image_pipe_data #(int DW_IN, int DW_OUT) extends uvm_sequence_item;
     }
 
     `uvm_object_utils_begin(image_pipe_data#(DW_IN, DW_OUT))
-        `uvm_field_int(is_data_in, UVM_DEFAULT)
-        `uvm_field_int(is_valid_in, UVM_DEFAULT)
-        `uvm_field_int(is_end_in, UVM_DEFAULT)
-        `uvm_field_int(is_busy_out, UVM_DEFAULT)
-        `uvm_field_int(im_data_out, UVM_DEFAULT)
-        `uvm_field_int(im_valid_out, UVM_DEFAULT)
-        `uvm_field_int(im_end_out, UVM_DEFAULT)
-        `uvm_field_int(im_busy_in, UVM_DEFAULT)
+        `uvm_field_int(image_pipe_data_in, UVM_DEFAULT)
+        `uvm_field_int(image_pipe_valid_in, UVM_DEFAULT)
+        `uvm_field_int(image_pipe_end_in, UVM_DEFAULT)
+        `uvm_field_int(image_pipe_busy_out, UVM_DEFAULT)
+        `uvm_field_int(ipm_data_out, UVM_DEFAULT)
+        `uvm_field_int(ipm_valid_out, UVM_DEFAULT)
+        `uvm_field_int(ipm_end_out, UVM_DEFAULT)
+        `uvm_field_int(ipm_busy_in, UVM_DEFAULT)
         // Control Flag
         `uvm_field_int(first_data_flag, UVM_DEFAULT)
         `uvm_field_int(last_data_flag, UVM_DEFAULT)
@@ -86,10 +86,10 @@ class image_pipe_data #(int DW_IN, int DW_OUT) extends uvm_sequence_item;
     endtask: display_busy
 
     virtual task displayAll();
-        `uvm_info("DP", $sformatf("is_data_in=%0h is_valid_in=%0b is_end_in=%0h is_busy_out=%0h
-                    im_data_out=%0h im_valid_out=%0h im_end_out=%0h im_busy_in=%0h"
-                    , is_data_in, is_valid_in, is_end_in, is_busy_out
-                    , im_data_out, im_valid_out, im_end_out, im_busy_in)
+        `uvm_info("DP", $sformatf("image_pipe_data_in=%0h image_pipe_valid_in=%0b image_pipe_end_in=%0h image_pipe_busy_out=%0h
+                    ipm_data_out=%0h ipm_valid_out=%0h ipm_end_out=%0h ipm_busy_in=%0h"
+                    , image_pipe_data_in, image_pipe_valid_in, image_pipe_end_in, image_pipe_busy_out
+                    , ipm_data_out, ipm_valid_out, ipm_end_out, ipm_busy_in)
                     , UVM_LOW)
     endtask: displayAll
 endclass: image_pipe_data

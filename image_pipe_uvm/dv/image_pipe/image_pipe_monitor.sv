@@ -57,17 +57,17 @@ class image_pipe_monitor #(int DW_IN, int DW_OUT) extends uvm_monitor;
 
             //
             if (monitor_intf=="in_intf") begin
-                wait(vif.cb_mon.is_valid_in & !vif.cb_mon.is_busy_out);
-                data_collected.is_data_in  = vif.cb_mon.is_data_in;
-                data_collected.is_valid_in = vif.cb_mon.is_valid_in;
-                data_collected.is_end_in   = vif.cb_mon.is_end_in;
+                wait(vif.cb_mon.image_pipe_valid_in & !vif.cb_mon.image_pipe_busy_out);
+                data_collected.image_pipe_data_in  = vif.cb_mon.image_pipe_data_in;
+                data_collected.image_pipe_valid_in = vif.cb_mon.image_pipe_valid_in;
+                data_collected.image_pipe_end_in   = vif.cb_mon.image_pipe_end_in;
             end
             else
             if (monitor_intf=="out_intf") begin
-                wait(vif.cb_mon.im_valid_out & !vif.cb_mon.im_busy_in);
-                data_collected.im_data_out  = vif.cb_mon.im_data_out;
-                data_collected.im_valid_out = vif.cb_mon.im_valid_out;
-                data_collected.im_end_out   = vif.cb_mon.im_end_out;
+                wait(vif.cb_mon.ipm_valid_out & !vif.cb_mon.ipm_busy_in);
+                data_collected.ipm_data_out  = vif.cb_mon.ipm_data_out;
+                data_collected.ipm_valid_out = vif.cb_mon.ipm_valid_out;
+                data_collected.ipm_end_out   = vif.cb_mon.ipm_end_out;
             end
 
             // We must clone the data to send it to analysis port.

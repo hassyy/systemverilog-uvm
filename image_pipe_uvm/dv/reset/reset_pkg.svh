@@ -8,6 +8,7 @@ package reset_pkg;
     `include "reset_transaction.sv"
     `include "reset_driver.sv"
     `include "reset_sequencer.sv"
+    `include "reset_agent.sv"
     `include "reset_sequence.sv"
 
 endpackage

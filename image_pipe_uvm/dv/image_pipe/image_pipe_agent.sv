@@ -16,7 +16,7 @@ class image_pipe_agent #(int DW_IN, int DW_OUT) extends uvm_agent;
     // Flag to use driver (msater side)
     protected uvm_active_passive_enum is_active = UVM_ACTIVE;
     // Flag to use busy_driver(slave side)
-    protected uvm_active_passive_enum is_busy_active = UVM_ACTIVE;
+    protected uvm_active_passive_enum image_pipe_busy_active = UVM_ACTIVE;
 
     // MASTER side driver/seqr
     image_pipe_driver#(DW_IN, DW_OUT) driver;
@@ -32,7 +32,7 @@ class image_pipe_agent #(int DW_IN, int DW_OUT) extends uvm_agent;
     // This MACRO will let flags be used vie config_db.
     `uvm_component_param_utils_begin(image_pipe_agent#(DW_IN, DW_OUT))
         `uvm_field_enum(uvm_active_passive_enum, is_active, UVM_ALL_ON)
-        `uvm_field_enum(uvm_active_passive_enum, is_busy_active, UVM_ALL_ON)
+        `uvm_field_enum(uvm_active_passive_enum, image_pipe_busy_active, UVM_ALL_ON)
     `uvm_component_utils_end
 
 
@@ -53,7 +53,7 @@ class image_pipe_agent #(int DW_IN, int DW_OUT) extends uvm_agent;
         end
 
         // SLAVE side build
-        if (is_busy_active==UVM_ACTIVE) begin
+        if (image_pipe_busy_active==UVM_ACTIVE) begin
             busy_driver    = image_pipe_busy_driver#(DW_IN, DW_OUT)::type_id::create("busy_driver", this);
             busy_sequencer = image_pipe_busy_sequencer#(DW_IN, DW_OUT)::type_id::create("busy_sequencer", this);
         end
@@ -72,7 +72,7 @@ class image_pipe_agent #(int DW_IN, int DW_OUT) extends uvm_agent;
             driver.seq_item_port.connect(sequencer.seq_item_export);
 
         // SLAVE side
-        if (is_busy_active == UVM_ACTIVE)
+        if (image_pipe_busy_active == UVM_ACTIVE)
             busy_driver.seq_item_port.connect(busy_sequencer.seq_item_export);
 
         `uvm_info(get_full_name( ), "CONNECT_PHASE done.", UVM_LOW)

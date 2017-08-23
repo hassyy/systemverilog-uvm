@@ -39,7 +39,7 @@ class image_pipe_busy_driver#(int DW_IN, int DW_OUT) extends uvm_driver #(image_
             wait(vif.rst_n==`IMAGE_PIPE_RESET_ACTIVE);
             `uvm_info(get_type_name(), "DO_RESET", UVM_LOW)
             while (vif.rst_n==`IMAGE_PIPE_RESET_ACTIVE) begin
-                vif.cb_tb.im_busy_in <= `IMAGE_PIPE_BUSY_ACTIVE;
+                vif.cb_tb.ipm_busy_in <= `IMAGE_PIPE_BUSY_ACTIVE;
                  @(vif.cb_tb);
             end
         end
@@ -67,7 +67,7 @@ class image_pipe_busy_driver#(int DW_IN, int DW_OUT) extends uvm_driver #(image_
         else begin
             // Drive busy
             if (req.busy_assert_cycle>0) begin
-                vif.cb_tb.im_busy_in <= `IMAGE_PIPE_BUSY_ACTIVE;
+                vif.cb_tb.ipm_busy_in <= `IMAGE_PIPE_BUSY_ACTIVE;
                 repeat(req.busy_assert_cycle) @(posedge vif.cb_tb);
                 //$display($sformatf("[%t][%s]", $stime(), get_full_name()));
             end
@@ -75,7 +75,7 @@ class image_pipe_busy_driver#(int DW_IN, int DW_OUT) extends uvm_driver #(image_
                 @(posedge vif.cb_tb);
 
             if (req.busy_negate_cycle>0) begin
-                vif.cb_tb.im_busy_in <= !`IMAGE_PIPE_BUSY_ACTIVE;
+                vif.cb_tb.ipm_busy_in <= !`IMAGE_PIPE_BUSY_ACTIVE;
                 repeat(req.busy_negate_cycle) @(posedge vif.cb_tb);
             end
             else

@@ -38,9 +38,9 @@ class image_pipe_driver #(int DW_IN, int DW_OUT)
             `uvm_info(get_type_name(), "DO_RESET", UVM_LOW)
             while (vif.rst_n==`IMAGE_PIPE_RESET_ACTIVE) begin
                 `uvm_info(get_type_name( ), "Resetting signals ", UVM_LOW)
-                vif.cb_tb.is_data_in  <= '0;
-                vif.cb_tb.is_valid_in <= '0;
-                vif.cb_tb.is_end_in   <= '0;
+                vif.cb_tb.image_pipe_data_in  <= '0;
+                vif.cb_tb.image_pipe_valid_in <= '0;
+                vif.cb_tb.image_pipe_end_in   <= '0;
                 @(vif.cb_tb);
             end
         end
@@ -66,21 +66,21 @@ class image_pipe_driver #(int DW_IN, int DW_OUT)
             repeat(req.wait_before_transmit) @(posedge vif.cb_tb);
         else
         if (req.last_data_flag) begin
-            vif.cb_tb.is_valid_in <= `IMAGE_PIPE_VALID_INACTIVE;
+            vif.cb_tb.image_pipe_valid_in <= `IMAGE_PIPE_VALID_INACTIVE;
             repeat(req.wait_before_end) @(posedge vif.cb_tb);
         end
         else begin
-            vif.cb_tb.is_valid_in <= `IMAGE_PIPE_VALID_INACTIVE;
+            vif.cb_tb.image_pipe_valid_in <= `IMAGE_PIPE_VALID_INACTIVE;
             repeat(req.valid_interval) @(posedge vif.cb_tb);
         end
 
-        vif.cb_tb.is_data_in  <= req.is_data_in;
-        vif.cb_tb.is_valid_in <= req.is_valid_in;
-        vif.cb_tb.is_end_in   <= req.is_end_in;
+        vif.cb_tb.image_pipe_data_in  <= req.image_pipe_data_in;
+        vif.cb_tb.image_pipe_valid_in <= req.image_pipe_valid_in;
+        vif.cb_tb.image_pipe_end_in   <= req.image_pipe_end_in;
         @(posedge vif.cb_tb);
 
         // Wait clk if busy is active.
-        while (vif.cb_tb.is_busy_out==`IMAGE_PIPE_BUSY_ACTIVE)
+        while (vif.cb_tb.image_pipe_busy_out==`IMAGE_PIPE_BUSY_ACTIVE)
             @(posedge vif.cb_tb);
 
     endtask: drive_sig

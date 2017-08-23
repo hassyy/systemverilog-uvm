@@ -19,7 +19,7 @@ set UVM_DEBUG_OPTION UVM_OBJECTION_TRACE
 ## e.g.) testbench, design, etc.
 
 vlog ../dv/tb.sv \
-     ../design/image_pipe.sv \
+     ../design/ips.sv \
     -mfcu \
     -suppress 2269 -suppress 2286 -suppress 2643 \
     +define+QUESTA \

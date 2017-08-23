@@ -1,9 +1,7 @@
 `ifndef __REG_CPU_SEQUENCE_LIB__
 `define __REG_CPU_SEQUENCE_LIB__
 
-`include "reg_cpu_common.svh"
-`include "dut_reg_block.sv"
-
+`include "sequence_common.svh"
 
 class reg_cpu_normal_sequence extends uvm_reg_sequence#();
 

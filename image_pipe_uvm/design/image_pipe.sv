@@ -3,7 +3,7 @@
 
 `include "../interface/image_pipe_if.sv"
 `include "../interface/reg_cpu_if.sv"
-`include "../dv/define.svh"
+`include "../dv/dut_env/dut_env_define.svh"
 
 module image_pipe
     #(parameter DW_IN=`IMAGE_PIPE_DW_IN1, DW_OUT=`IMAGE_PIPE_DW_OUT1)
@@ -100,7 +100,7 @@ end
 
 
 
-////////// REG_CPU
+////////// U
 
     reg [12: 0] i_reg_1;
     reg [15: 0] i_reg_2;

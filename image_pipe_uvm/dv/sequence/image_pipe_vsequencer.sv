@@ -1,11 +1,10 @@
 `ifndef __IMAGE_PIPE_VSEQUENCER__
 `define __IMAGE_PIPE_VSEQUENCER__
 
-`include "common_header.svh"
-`include "image_pipe_sequencer.sv"
-`include "image_pipe_busy_sequencer.sv"
-`include "reg_cpu_sequencer.sv"
-`include "reset_sequencer.sv"
+`include "sequence_common.svh"
+import image_pipe_pkg::*;
+import reg_cpu_pkg::*;
+import reset_pkg::*;
 
 class image_pipe_vsequencer#(int DW_IN, int DW_OUT) extends uvm_sequencer#();
 

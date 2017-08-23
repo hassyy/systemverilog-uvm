@@ -1,7 +1,6 @@
 `ifndef __DUT_REG_BLOCK__
 `define __DUT_REG_BLOCK__
 
-`include "common_header.svh"
 `include "dut_reg_1_reg.sv"
 `include "dut_reg_2_reg.sv"
 
@@ -39,7 +38,7 @@ class dut_reg_block extends uvm_reg_block;
         reg_map.add_reg(.rg(reg_2), .offset(8'h04), .rights("RW"));
 
         // BACKDOOR ACCESS
-        add_hdl_path(.path("tb.ips_top"));
+        add_hdl_path(.path("tb.image_pipe_top"));
 
         // Fix address map
         lock_model();

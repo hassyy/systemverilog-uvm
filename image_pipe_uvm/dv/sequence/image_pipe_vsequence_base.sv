@@ -1,12 +1,7 @@
 `ifndef __IMAGE_PIPE_BASE_VSEQUENCE__
 `define __IMAGE_PIPE_BASE_VSEQUENCE__
 
-`include "common_header.svh"
-`include "image_pipe_vsequencer.sv"
-`include "image_pipe_sequencer.sv"
-`include "image_pipe_busy_sequencer.sv"
-`include "reg_cpu_sequencer.sv"
-`include "reset_sequencer.sv"
+`include "sequence_common.svh"
 
 class image_pipe_vsequence_base#(int DW_IN, int DW_OUT) extends uvm_sequence#();
 

@@ -1,20 +1,18 @@
 `ifndef __TB__
 `define __TB__
 
-`include "../dv/image_pipe_pkg.svh"
+// TODO: Temporally include define here.
+`include "../dv/dut_env/dut_env_define.svh"
 
-`include "../interface/image_pipe_if.sv"
-`include "../interface/reg_cpu_if.sv"
-`include "../interface/reset_if.sv"
-
-`include "../design/image_pipe.sv"
 
 module tb;
     import uvm_pkg::*;
-    import image_pipe_pkg::*;
+    // import image_pipe_pkg::*;
 
-    localparam DW_IN = `IMAGE_PIPE_DW_IN1;
-    localparam DW_OUT = `IMAGE_PIPE_DW_OUT1;
+    // localparam DW_IN = `IMAGE_PIPE_DW_IN1;
+    // localparam DW_OUT = `IMAGE_PIPE_DW_OUT1;
+    localparam DW_IN = 32;
+    localparam DW_OUT = 32;
 
     bit clk;
     bit rst_n;
@@ -25,22 +23,22 @@ module tb;
     image_pipe_if #(.DW_IN(DW_IN), .DW_OUT(DW_OUT)) vif_out(.clk(clk), .rst_n(reset_if.s_rst_n));
     reg_cpu_if reg_if(.reg_cpu_clk(clk), .rst_n(reset_if.reg_cpu_rst_n));
 
-    image_pipe image_pipe_top(
+    ips image_pipe_top(
         .clk(clk)
         , .s_rst_n(reset_if.s_rst_n)
         , .reg_cpu_rst_n(reset_if.reg_cpu_rst_n)
 
         // Connection between DUT and TB must be the vif without clocking block.
         // Or clocking skews are not applied to DUT.
-        , .image_pipe_data_in(vif_in.is_data_in)
-        , .image_pipe_valid_in(vif_in.is_valid_in)
-        , .image_pipe_end_in(vif_in.is_end_in)
-        , .image_pipe_busy_out(vif_in.is_busy_out)
+        , .image_pipe_data_in(vif_in.image_pipe_data_in)
+        , .image_pipe_valid_in(vif_in.image_pipe_valid_in)
+        , .image_pipe_end_in(vif_in.image_pipe_end_in)
+        , .image_pipe_busy_out(vif_in.image_pipe_busy_out)
 
-        , .image_pipe_data_out(vif_out.im_data_out)
-        , .image_pipe_valid_out(vif_out.im_valid_out)
-        , .image_pipe_end_out(vif_out.im_end_out)
-        , .image_pipe_busy_in(vif_out.im_busy_in)
+        , .image_pipe_data_out(vif_out.ipm_data_out)
+        , .image_pipe_valid_out(vif_out.ipm_valid_out)
+        , .image_pipe_end_out(vif_out.ipm_end_out)
+        , .image_pipe_busy_in(vif_out.ipm_busy_in)
 
         , .reg_cpu_cs(reg_if.reg_cpu_cs)
         , .reg_cpu_addr(reg_if.reg_cpu_addr[31:2])

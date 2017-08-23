@@ -12,14 +12,14 @@ class image_pipe_coverage#(int DW_IN, int DW_OUT)
 
     covergroup cg;
         option.per_instance = 1;
-        cov_is_data_in  : coverpoint ip_data.is_data_in;
-        cov_is_valid_in : coverpoint ip_data.is_valid_in;
-        cov_is_end_in   : coverpoint ip_data.is_end_in;
-        cov_is_busy_out : coverpoint ip_data.is_busy_out;
-        cov_im_data_out : coverpoint ip_data.im_data_out;
-        cov_im_valid_out: coverpoint ip_data.im_valid_out;
-        cov_im_end_out  : coverpoint ip_data.im_end_out;
-        cov_im_busy_in  : coverpoint ip_data.im_busy_in;
+        cov_image_pipe_data_in  : coverpoint ip_data.image_pipe_data_in;
+        cov_image_pipe_valid_in : coverpoint ip_data.image_pipe_valid_in;
+        cov_image_pipe_end_in   : coverpoint ip_data.image_pipe_end_in;
+        cov_image_pipe_busy_out : coverpoint ip_data.image_pipe_busy_out;
+        cov_ipm_data_out : coverpoint ip_data.ipm_data_out;
+        cov_ipm_valid_out: coverpoint ip_data.ipm_valid_out;
+        cov_ipm_end_out  : coverpoint ip_data.ipm_end_out;
+        cov_ipm_busy_in  : coverpoint ip_data.ipm_busy_in;
     endgroup: cg
 
     function new(string name, uvm_component parent);
