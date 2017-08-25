@@ -1,20 +1,18 @@
 `ifndef __TB__
 `define __TB__
 
-`include "dut_env_pkg.svh"
+`include "../dv/dut_env/dut_env_define.svh"
 
-`include "../interface/image_pipe_if.sv"
-`include "../interface/reg_cpu_if.sv"
-`include "../interface/reset_if.sv"
-
-`include "../design/ips.sv"
+import image_pipe_pkg::*;
+import test_pkg::*;
 
 module tb;
     import uvm_pkg::*;
-    import image_pipe_pkg::*;
 
-    localparam DW_IN = `IMAGE_PIPE_DW_IN1;
-    localparam DW_OUT = `IMAGE_PIPE_DW_OUT1;
+    localparam DW_IN = `DUT_IMAGE_PIPE_DW_IN;
+    localparam DW_OUT = `DUT_IMAGE_PIPE_DW_OUT;
+    localparam AW = `DUT_REG_CPU_AW;
+    localparam DW = `DUT_REG_CPU_DW;
 
     bit clk;
     bit rst_n;
@@ -23,9 +21,9 @@ module tb;
 
     image_pipe_if #(.DW_IN(DW_IN) , .DW_OUT(DW_OUT)) vif_in(.clk(clk), .rst_n(reset_if.s_rst_n));
     image_pipe_if #(.DW_IN(DW_IN), .DW_OUT(DW_OUT)) vif_out(.clk(clk), .rst_n(reset_if.s_rst_n));
-    reg_cpu_if reg_if(.reg_cpu_clk(clk), .rst_n(reset_if.reg_cpu_rst_n));
+    reg_cpu_if #(.AW(AW), .DW(DW)) reg_if(.reg_cpu_clk(clk), .rst_n(reset_if.reg_cpu_rst_n));
 
-    ips image_pipe_top(
+    image_pipe image_pipe_top(
         .clk(clk)
         , .s_rst_n(reset_if.s_rst_n)
         , .reg_cpu_rst_n(reset_if.reg_cpu_rst_n)
@@ -80,10 +78,10 @@ module tb;
             // Also, you must set the generic parameter to virtual interface to have the same param.
             // Or, you'll have Illegal assingment error.
             //   "interface must be assigned a matching interface or virtual interface."
-            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_IN)))::set(uvm_root::get(), "*.agent.*", "in_intf", vif_in);
-            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_IN)))::set(uvm_root::get(), "*.agent.*", "out_intf", vif_out);
-            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_IN)))::set(uvm_root::get(), "*.monitor", "monitor_intf", vif_out);
-            uvm_config_db#(virtual reg_cpu_if)::set(uvm_root::get(), "*.agent.*", "mst_intf", reg_if);
+            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_OUT)))::set(uvm_root::get(), "*.agent.*", "in_intf", vif_in);
+            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_OUT)))::set(uvm_root::get(), "*.agent.*", "out_intf", vif_out);
+            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_OUT)))::set(uvm_root::get(), "*.monitor", "monitor_intf", vif_out);
+            uvm_config_db#(virtual reg_cpu_if#(.AW(AW), .DW(DW)))::set(uvm_root::get(), "*.agent.*", "mst_intf", reg_if);
             uvm_config_db#(virtual reset_if)::set(uvm_root::get(), "*.rst_agent.*", "reset_if", reset_if);
 
             // UVM start test.

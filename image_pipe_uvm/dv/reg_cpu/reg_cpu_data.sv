@@ -4,7 +4,7 @@
 `include "reg_cpu_common.svh"
 
 
-class reg_cpu_data #(int AW=32, int DW=32) extends uvm_sequence_item;
+class reg_cpu_data #(int AW, int DW) extends uvm_sequence_item;
 
     typedef enum bit {WRITE, READ} t_reg_cpu_cmd;
     rand t_reg_cpu_cmd reg_cpu_cmd;
@@ -33,7 +33,7 @@ class reg_cpu_data #(int AW=32, int DW=32) extends uvm_sequence_item;
     }
 
     // Factory registration.
-    `uvm_object_utils_begin(reg_cpu_data#(AW, DW))
+    `uvm_object_param_utils_begin(reg_cpu_data#(AW, DW))
         `uvm_field_enum(t_reg_cpu_cmd, reg_cpu_cmd, UVM_DEFAULT)
 
         `uvm_field_int(reg_cpu_cs, UVM_DEFAULT)

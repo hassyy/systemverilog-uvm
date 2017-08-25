@@ -1,14 +1,7 @@
 `ifndef __IMAGE_PIPE_AGENT__
 `define __IMAGE_PIPE_AGENT__
 
-`include "image_pipe_define.svh"
-
-`include "image_pipe_data.sv"
-`include "image_pipe_sequencer.sv"
-`include "image_pipe_driver.sv"
-`include "image_pipe_busy_driver.sv"
-`include "image_pipe_busy_sequencer.sv"
-`include "image_pipe_monitor.sv"
+`include "image_pipe_common.svh"
 
 
 class image_pipe_agent #(int DW_IN, int DW_OUT) extends uvm_agent;

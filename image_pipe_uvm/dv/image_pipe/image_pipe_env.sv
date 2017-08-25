@@ -1,14 +1,15 @@
 `ifndef __IMAGE_PIPE_ENV__
 `define __IMAGE_PIPE_ENV__
 
-`include "image_pipe_agent.sv"
+
+`include "image_pipe_common.svh"
 
 
 class image_pipe_env#(int DW_IN, int DW_OUT) extends uvm_env;
 
     image_pipe_agent#(DW_IN, DW_OUT) agent;
 
-    `uvm_component_utils(image_pipe_env#(DW_IN, DW_OUT))
+    `uvm_component_param_utils(image_pipe_env#(DW_IN, DW_OUT))
 
     function new(string name, uvm_component parent);
         super.new(name, parent);

@@ -1,7 +1,7 @@
 `ifndef __IMAGE_PIPE_BUSY_SEQUENCER__
 `define __IMAGE_PIPE_BUSY_SEQUENCER__
 
-`include "image_pipe_data.sv"
+`include "image_pipe_common.svh"
 
 
 class image_pipe_busy_sequencer#(int DW_IN, int DW_OUT)

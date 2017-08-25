@@ -15,7 +15,7 @@ class image_pipe_simple_sequence#(int DW_IN, int DW_OUT) extends uvm_sequence #(
         super.new(name);
     endfunction: new
 
-    // IPS sequence HERE:
+    // IMAGE_PIPE sequence HERE:
     virtual task body();
 
         `uvm_info(get_full_name, "START body()", UVM_LOW)

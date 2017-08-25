@@ -3,25 +3,26 @@
 
 `include "sequence_common.svh"
 
-class image_pipe_vsequence_base#(int DW_IN, int DW_OUT) extends uvm_sequence#();
+//class image_pipe_vsequence_base#(int DW_IN, int DW_OUT, int AW, int DW) extends uvm_sequence#();
+class image_pipe_vsequence_base#(int DW_IN, int DW_OUT, int AW, int DW) extends uvm_sequence;
 
     // Mandatory: Factory registration
-    `uvm_object_utils(image_pipe_vsequence_base#(DW_IN, DW_OUT))
+    `uvm_object_param_utils(image_pipe_vsequence_base#(DW_IN, DW_OUT, AW, DW))
 
     // Create handle for virtual sequencer with UVM MACRO
     // You can point this virtual sequencer via p_sequencer in inherited class.
-    //`uvm_declare_p_sequencer(image_pipe_vsequencer)
+    //`uvm_declare_p_sequencer(dut_vsequencer#(DW_IN, DW_OUT, AW, DW))
 
-    image_pipe_vsequencer#(DW_IN, DW_OUT) v_seqr;
+    dut_vsequencer#(DW_IN, DW_OUT, AW, DW) v_seqr;
 
     // Handle for target sequencers
     image_pipe_sequencer#(DW_IN, DW_OUT) image_pipe_seqr;
     image_pipe_busy_sequencer#(DW_IN, DW_OUT) image_pipe_busy_seqr;
-    reg_cpu_sequencer reg_cpu_seqr;
+    reg_cpu_sequencer#(AW, DW) reg_cpu_seqr;
     reset_sequencer reset_seqr;
 
 
-    // Mandatory: This "new" is the stype for uvm_object (no parent)
+    // Mandatory: This "new" is the type for uvm_object (no parent)
     function new (string name="image_pipe_vsequence_base");
         super.new(name);
     endfunction: new
@@ -36,7 +37,7 @@ class image_pipe_vsequence_base#(int DW_IN, int DW_OUT) extends uvm_sequence#();
     // Assign pointers to the sub-sequences here in the body() of base class
     task body();
         if (!$cast(v_seqr, m_sequencer))
-            `uvm_fatal(get_full_name(), "VIRTAUL_SEQ POINTER CAST FAILED")
+            `uvm_fatal(get_full_name(), "VIRTUALL_SEQ POINTER CAST FAILED")
         if (v_seqr.image_pipe_seqr==null)
             `uvm_fatal(get_full_name(), "NULL_POINTER_EXCEPTION: image_pipe_seqr")
         if (v_seqr.image_pipe_busy_seqr==null)

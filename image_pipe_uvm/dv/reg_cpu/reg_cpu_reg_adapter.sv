@@ -4,10 +4,10 @@
 `include "reg_cpu_common.svh"
 `include "reg_cpu_data.sv"
 
-class reg_cpu_reg_adapter extends uvm_reg_adapter;
+class reg_cpu_reg_adapter#(int AW, int DW) extends uvm_reg_adapter;
 
     // Mandatory: Factory registration
-    `uvm_object_utils(reg_cpu_reg_adapter)
+    `uvm_object_param_utils(reg_cpu_reg_adapter#(AW, DW))
 
     rand bit first_flag;
 
@@ -26,9 +26,9 @@ class reg_cpu_reg_adapter extends uvm_reg_adapter;
 
     // Access from reg_adapter to DUT.
     virtual function uvm_sequence_item reg2bus(const ref uvm_reg_bus_op rw);
-        reg_cpu_data#() data_tx = reg_cpu_data#()::type_id::create("data_tx");
+        reg_cpu_data#(AW, DW) data_tx = reg_cpu_data#(AW,DW)::type_id::create("data_tx");
 
-        data_tx.reg_cpu_cmd = (rw.kind==UVM_READ) ? reg_cpu_data#()::READ : reg_cpu_data#()::WRITE;
+        data_tx.reg_cpu_cmd = (rw.kind==UVM_READ) ? reg_cpu_data#(AW,DW)::READ : reg_cpu_data#(AW,DW)::WRITE;
         data_tx.reg_cpu_addr = rw.addr;
         data_tx.reg_cpu_data_wr = rw.data;
 
@@ -50,7 +50,7 @@ class reg_cpu_reg_adapter extends uvm_reg_adapter;
     // DUT to reg_adapter
     virtual function void bus2reg(
         uvm_sequence_item bus_item, ref uvm_reg_bus_op rw);
-        reg_cpu_data#() data_tx;
+        reg_cpu_data#(AW,DW) data_tx;
 
         `uvm_info(get_name(), "[BUS2REG]", UVM_LOW)
 
@@ -65,13 +65,13 @@ class reg_cpu_reg_adapter extends uvm_reg_adapter;
             first_flag = 0;
         end
 
-        rw.kind = (data_tx.reg_cpu_cmd==reg_cpu_data#()::READ) ? UVM_READ : UVM_WRITE;
+        rw.kind = (data_tx.reg_cpu_cmd==reg_cpu_data#(AW,DW)::READ) ? UVM_READ : UVM_WRITE;
 
         rw.addr = data_tx.reg_cpu_addr;
-        if (data_tx.reg_cpu_cmd==reg_cpu_data#()::READ)
+        if (data_tx.reg_cpu_cmd==reg_cpu_data#(AW,DW)::READ)
             rw.data = data_tx.reg_cpu_data_rd;
         else
-        if (data_tx.reg_cpu_cmd==reg_cpu_data#()::WRITE)
+        if (data_tx.reg_cpu_cmd==reg_cpu_data#(AW,DW)::WRITE)
             rw.data = data_tx.reg_cpu_data_wr;
 
         rw.status = UVM_IS_OK;

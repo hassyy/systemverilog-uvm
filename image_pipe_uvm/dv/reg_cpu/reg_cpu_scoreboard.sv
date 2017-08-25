@@ -1,24 +1,24 @@
-`ifndef __IMAGE_PIPE_SCOREBOARD__
-`define __IMAGE_PIPE_SCOREBOARD__
+`ifndef __REG_CPU_SCOREBOARD__
+`define __REG_CPU_SCOREBOARD__
 
-`include "image_pipe_common.svh"
+`include "reg_cpu_common.svh"
 
 
-class image_pipe_scoreboard#(int DW_IN, int DW_OUT) extends uvm_scoreboard;
+class reg_cpu_scoreboard#(int AW, int DW) extends uvm_scoreboard;
 
     // Analysis fifo is connected to the monitor.
-    uvm_tlm_analysis_fifo #(image_pipe_data#(DW_IN, DW_OUT)) in_data_af;
-    uvm_tlm_analysis_fifo #(image_pipe_data#(DW_IN, DW_OUT)) out_data_af;
+    uvm_tlm_analysis_fifo #(reg_cpu_data#(AW, DW)) af_in;
+    uvm_tlm_analysis_fifo #(reg_cpu_data#(AW, DW)) af_out;
 
     // This is the collected data.
-    image_pipe_data#(DW_IN, DW_OUT) in_data;
-    image_pipe_data#(DW_IN, DW_OUT) out_data;
+    reg_cpu_data#(AW, DW) in_data;
+    reg_cpu_data#(AW, DW) out_data;
 
     int num_compare;
     int num_compare_ok;
 
     // Factory registration
-    `uvm_component_param_utils(image_pipe_scoreboard#(DW_IN, DW_OUT))
+    `uvm_component_param_utils(reg_cpu_scoreboard#(AW, DW))
 
 
     function new(string name, uvm_component parent);
@@ -30,14 +30,13 @@ class image_pipe_scoreboard#(int DW_IN, int DW_OUT) extends uvm_scoreboard;
         super.build_phase(phase);
 
         // We use new for analysis fifo which cannot be registered to UVM Factory.
-        in_data_af = new("in_data_af", this);
-        out_data_af = new("out_data_af", this);
+        af_in= new("af_in", this);
+        af_out= new("af_out", this);
 
-        in_data = image_pipe_data#(DW_IN, DW_OUT)::type_id::create("in_data");
-        out_data = image_pipe_data#(DW_IN, DW_OUT)::type_id::create("out_data");
+        in_data = reg_cpu_data#(AW, DW)::type_id::create("in_data");
+        out_data = reg_cpu_data#(AW, DW)::type_id::create("out_data");
 
         `uvm_info(get_full_name(), "BUILD_PHASE done", UVM_LOW)
-
     endfunction : build_phase
 
 
@@ -52,9 +51,9 @@ class image_pipe_scoreboard#(int DW_IN, int DW_OUT) extends uvm_scoreboard;
         num_compare_ok = 0;
         forever begin
             // Wait for the arrival of in_data
-            in_data_af.get(in_data);
+            af_in.get(in_data);
             // Then wait for the arrival of in_data
-            out_data_af.get(out_data);
+            af_out.get(out_data);
             // Do compare after getting in_data and out_data.
             compare_data();
         end
@@ -64,12 +63,12 @@ class image_pipe_scoreboard#(int DW_IN, int DW_OUT) extends uvm_scoreboard;
     virtual task compare_data();
 
         num_compare++;
-        if (in_data.image_pipe_data_in != out_data.ipm_data_out)
+        if (in_data.reg_cpu_data_in != out_data.ipm_data_out)
             `uvm_error(
                 //get_type_name()
                 get_name()
                 , $sformatf("[COMPARE_ERROR] actual=%0h, expected=%0h"
-                , out_data.ipm_data_out, in_data.image_pipe_data_in)
+                , out_data.ipm_data_out, in_data.reg_cpu_data_in)
             )
         else
             num_compare_ok++;
@@ -88,6 +87,6 @@ class image_pipe_scoreboard#(int DW_IN, int DW_OUT) extends uvm_scoreboard;
                     , UVM_LOW)
     endfunction : report_phase
 
-endclass : image_pipe_scoreboard
+endclass : reg_cpu_scoreboard
 
 `endif

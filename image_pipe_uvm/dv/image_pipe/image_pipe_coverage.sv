@@ -1,14 +1,13 @@
-`include "image_pipe_pkg.svh"
-`include "image_pipe_data.sv"
+`include "image_pipe_common.svh"
 
 
 class image_pipe_coverage#(int DW_IN, int DW_OUT)
     extends uvm_subscriber #(image_pipe_data#(DW_IN, DW_OUT));
 
-    image_pipe_data#() ip_data;
+    image_pipe_data#(DW_IN, DW_OUT) ip_data;
     int count;
 
-    `uvm_component_utils(image_pipe_coverage#(DW_IN, DW_OUT))
+    `uvm_component_param_utils(image_pipe_coverage#(DW_IN, DW_OUT))
 
     covergroup cg;
         option.per_instance = 1;
@@ -27,7 +26,7 @@ class image_pipe_coverage#(int DW_IN, int DW_OUT)
         cg = new( );
     endfunction: new
 
-    function void write(image_pipe_data#() t);
+    function void write(image_pipe_data#(DW_IN, DW_OUT) t);
         ip_data = t;
         count++;
         cg.sample( );

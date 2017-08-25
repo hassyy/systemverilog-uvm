@@ -2,12 +2,11 @@
 `define __REG_CPU_SEQUENCER__
 
 `include "reg_cpu_common.svh"
-`include "reg_cpu_data.sv"
 
-class reg_cpu_sequencer extends uvm_sequencer #(reg_cpu_data#());
+class reg_cpu_sequencer#(int AW, int DW) extends uvm_sequencer #(reg_cpu_data#(AW, DW));
 
     // Mandatory: Factory registration
-    `uvm_sequencer_param_utils(reg_cpu_sequencer);
+    `uvm_sequencer_param_utils(reg_cpu_sequencer#(AW, DW));
 
 
     // Mandatory

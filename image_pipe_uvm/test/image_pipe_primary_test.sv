@@ -4,12 +4,11 @@
 `include "test_common.svh"
 
 
-//class image_pipe_data_random_timing extends image_pipe_data#(`IMAGE_PIPE_DW_IN1,`IMAGE_PIPE_DW_OUT1);
-class image_pipe_data_random_timing extends image_pipe_data#(32,32);
-
+class image_pipe_data_random_timing#(int DW_IN=`TEST_IMAGE_PIPE_DW_IN, int DW_OUT=`TEST_IMAGE_PIPE_DW_OUT)
+    extends image_pipe_data#(DW_IN, DW_OUT);
 
     // Factory registration for overrideing.
-    `uvm_object_utils(image_pipe_data_random_timing)
+    `uvm_object_param_utils(image_pipe_data_random_timing#(DW_IN, DW_OUT))
 
     // Override soft constraint of default_timing.
     constraint override_timing {
@@ -34,8 +33,10 @@ endclass
 class image_pipe_primary_test extends base_test;
     `uvm_component_utils(image_pipe_primary_test)
 
-    localparam DW_IN=32;
-    localparam DW_OUT=32;
+    localparam DW_IN=`TEST_IMAGE_PIPE_DW_IN;
+    localparam DW_OUT=`TEST_IMAGE_PIPE_DW_OUT;
+    localparam AW=`TEST_REG_CPU_AW;
+    localparam DW=`TEST_REG_CPU_DW;
 
 
     function new(string name, uvm_component parent);
@@ -44,14 +45,14 @@ class image_pipe_primary_test extends base_test;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        // Factory override for the ips timing parameter
-        image_pipe_data#(DW_IN, DW_OUT)::type_id::set_type_override(image_pipe_data_random_timing::get_type());
+        // Factory override for the image_pipe timing parameter
+        image_pipe_data#(DW_IN, DW_OUT)::type_id::set_type_override(image_pipe_data_random_timing#(DW_IN, DW_OUT)::get_type());
     endfunction : build_phase
 
     virtual task run_phase(uvm_phase phase);
 
         // Declare the sequence to use in your test.
-        image_pipe_reg_cpu_simple_vsequence#(DW_IN, DW_OUT) v_seq;
+        image_pipe_reg_cpreg_cpu_simple_vsequence#(DW_IN, DW_OUT, AW, DW) v_seq;
 
         super.run_phase(phase);
 
@@ -59,14 +60,15 @@ class image_pipe_primary_test extends base_test;
         phase.raise_objection(this);
 
         // Instantiate virtual sequencer.
-        v_seq = image_pipe_reg_cpu_simple_vsequence#(DW_IN, DW_OUT)::type_id::create("v_seq");
+        v_seq = image_pipe_reg_cpreg_cpu_simple_vsequence#(DW_IN, DW_OUT, AW, DW)::type_id::create("v_seq");
 
         // Instantiate v_seq.reg_cpu_seq here to assign reg_block.
-        v_seq.reg_cpu_seq = reg_cpu_normal_sequence::type_id::create("reg_cpu_seq");
+        v_seq.reg_cpu_seq = reg_cpu_normal_sequence#(AW,DW)::type_id::create("reg_cpu_seq");
         v_seq.reg_cpu_seq.model = reg_block;  // for RAL
 
         // Start senario:
         v_seq.start(env.v_seqr);
+        //v_seq.start(null);
 
         // Reset flag for timeout.
         phase.drop_objection(this);

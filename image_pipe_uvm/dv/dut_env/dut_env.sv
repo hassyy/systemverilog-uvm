@@ -6,11 +6,10 @@
 
 class dut_env extends uvm_env;
 
-    localparam DW_IN  = `IMAGE_PIPE_DW_IN1;
-    localparam DW_OUT = `IMAGE_PIPE_DW_OUT1;
-
-    localparam AW = `REG_CPU_AW;
-    localparam DW = `REG_CPU_DW;
+    localparam DW_IN  = `DUT_IMAGE_PIPE_DW_IN;
+    localparam DW_OUT = `DUT_IMAGE_PIPE_DW_OUT;
+    localparam AW = `DUT_REG_CPU_AW;
+    localparam DW = `DUT_REG_CPU_DW;
 
     reset_agent rst_agent;
     image_pipe_env#(DW_IN, DW_OUT) ip_env_in;
@@ -19,11 +18,11 @@ class dut_env extends uvm_env;
     // Scoreboad which will be connected to image_pipe_monitor
     image_pipe_scoreboard#(DW_IN, DW_OUT) sb;
 
-    // reg_cpu
-    reg_cpu_env reg_env;
+    // u
+    reg_cpu_env#(AW, DW) reg_env;
     dut_reg_block reg_block;
 
-    image_pipe_vsequencer#(DW_IN, DW_OUT) v_seqr;
+    dut_vsequencer#(DW_IN, DW_OUT, AW, DW) v_seqr;
 
     `uvm_component_utils(dut_env)
 
@@ -56,9 +55,9 @@ class dut_env extends uvm_env;
 
         reg_env = reg_cpu_env#(AW, DW)::type_id::create("reg_env", this);
 
-        v_seqr = image_pipe_vsequencer#(DW_IN, DW_OUT)::type_id::create("v_seqr", this);
+        v_seqr = dut_vsequencer#(DW_IN, DW_OUT, AW, DW)::type_id::create("v_seqr", this);
 
-        `uvm_info(get_full_name( ), "BUILD_PHASE done.", UVM_LOW)
+        `uvm_info(get_full_name(), "BUILD_PHASE done.", UVM_LOW)
     endfunction: build_phase
 
 

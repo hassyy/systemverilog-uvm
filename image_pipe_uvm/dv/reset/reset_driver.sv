@@ -7,7 +7,7 @@
 // FYI) uvm_driver #(REQ, RESP=REQ)
 class reset_driver extends uvm_driver #(reset_transaction);
 
-    `uvm_component_param_utils(reset_driver)
+    `uvm_component_utils(reset_driver)
 
     // Declare vif to drive signals
     virtual reset_if reset_vif;
@@ -33,7 +33,6 @@ class reset_driver extends uvm_driver #(reset_transaction);
 
         seq_item_port.get_next_item(req);
         drive_sig();
-        `uvm_info(get_name(), $sformatf("wait_before_reset:%d", req.wait_before_reset), UVM_LOW)
         repeat(req.wait_before_reset) @reset_vif.cb_tb;
         seq_item_port.item_done();
 
@@ -71,8 +70,8 @@ class reset_driver extends uvm_driver #(reset_transaction);
 
 
     task drive_sig();
-        req.display();
-        reset_vif.cb_tb.s_rst_n       <= req.reset_data;
+        //req.display();
+        reset_vif.cb_tb.s_rst_n <= req.reset_data;
         reset_vif.cb_tb.reg_cpu_rst_n <= req.reset_data;
     endtask: drive_sig
 

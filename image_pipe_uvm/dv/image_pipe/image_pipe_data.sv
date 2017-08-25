@@ -1,8 +1,7 @@
 `ifndef __IMAGE_DATA__
 `define __IMAGE_DATA__
 
-import uvm_pkg::*;
-`include "uvm_macros.svh"
+`include "image_pipe_common.svh"
 
 
 class image_pipe_data #(int DW_IN, int DW_OUT) extends uvm_sequence_item;
@@ -32,7 +31,7 @@ class image_pipe_data #(int DW_IN, int DW_OUT) extends uvm_sequence_item;
 
 
     // Default constraint
-    constraint ct_default_ips {
+    constraint ct_default_image_pipe {
         soft image_pipe_valid_in==0;
         soft image_pipe_end_in==0;
         soft image_pipe_busy_out==0;
@@ -53,7 +52,7 @@ class image_pipe_data #(int DW_IN, int DW_OUT) extends uvm_sequence_item;
         soft busy_negate_cycle==0;
     }
 
-    `uvm_object_utils_begin(image_pipe_data#(DW_IN, DW_OUT))
+    `uvm_object_param_utils_begin(image_pipe_data#(DW_IN, DW_OUT))
         `uvm_field_int(image_pipe_data_in, UVM_DEFAULT)
         `uvm_field_int(image_pipe_valid_in, UVM_DEFAULT)
         `uvm_field_int(image_pipe_end_in, UVM_DEFAULT)

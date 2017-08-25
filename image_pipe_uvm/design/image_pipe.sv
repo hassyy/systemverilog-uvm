@@ -1,12 +1,10 @@
 `ifndef __IMAGE_PIPE__
 `define __IMAGE_PIPE__
 
-`include "../interface/image_pipe_if.sv"
-`include "../interface/reg_cpu_if.sv"
 `include "../dv/dut_env/dut_env_define.svh"
 
 module image_pipe
-    #(parameter DW_IN=`IMAGE_PIPE_DW_IN1, DW_OUT=`IMAGE_PIPE_DW_OUT1)
+    #(parameter DW_IN=`DUT_IMAGE_PIPE_DW_IN, DW_OUT=`DUT_IMAGE_PIPE_DW_OUT)
     (
     input wire clk
     , input wire s_rst_n
@@ -20,7 +18,7 @@ module image_pipe
     , output reg image_pipe_valid_out
     , output reg image_pipe_end_out
     , input wire image_pipe_busy_in
-    // REG_CPU
+    // U
     , input wire reg_cpu_cs
     , input wire [31:2] reg_cpu_addr
     , input wire [31:0] reg_cpu_data_wr

@@ -3,10 +3,11 @@
 
 `include "sequence_common.svh"
 
-class reg_cpu_normal_sequence extends uvm_reg_sequence#();
+//class reg_cpu_normal_sequence#(int AW, int DW) extends uvm_reg_sequence#(reg_cpu_data#(AW, DW));
+class reg_cpu_normal_sequence#(int AW, int DW) extends uvm_reg_sequence#();
 
     // Mandatory: Fatory registration
-    `uvm_object_param_utils(reg_cpu_normal_sequence)
+    `uvm_object_param_utils(reg_cpu_normal_sequence#(AW, DW))
 
 
     // Mandatory: new

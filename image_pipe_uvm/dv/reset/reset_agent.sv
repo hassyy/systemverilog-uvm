@@ -1,5 +1,5 @@
 `ifndef __RESET_AGENT__
-    `define __RESET_AGENT__
+`define __RESET_AGENT__
 
 `include "reset_common.svh"
 

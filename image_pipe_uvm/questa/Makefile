@@ -4,6 +4,7 @@ DESIGN_ROOT_DIR = $(ROOT_DIR)/design
 INTERFACE_ROOT_DIR = $(ROOT_DIR)/interface
 DV_ROOT_DIR = $(ROOT_DIR)/dv
 TEST_ROOT_DIR = $(ROOT_DIR)/test
+TESTBENCH_ROOT_DIR = $(ROOT_DIR)/testbench
 
 
 ##### DUT
@@ -47,17 +48,33 @@ TARGET_TEST_PKG_FILES = $(TARGET_TEST_PKG_DIR)/test_pkg.svh \
 
 ##### TB
 
-TARGET_TB_DIR   = $(DV_ROOT_DIR)
+TARGET_TB_DIR   = $(TESTBENCH_ROOT_DIR)
 TARGET_TB_FILES = $(TARGET_TB_DIR)/tb.sv \
 
 
-##### VLOG OPTION
+##### VLOG
 
 VLOG_SUPPRESS_OPT = -suppress 2643 -suppress 2269
 VLOG_OPT = -incr -sv $(VLOG_SUPPRESS_OPT)
 
+##### VSIM
+
+VSIM_OPT = -c -classdebug -uvmcontrol=all -voptargs="+acc"
+TESTBENCH_NAME = tb
+D_TESTNAME = +UVM_TESTNAME=image_pipe_primary_test
+DOFILE = "add wave -position insertpoint sim:/tb/image_pipe_top/* ; run -all; q"
+DUMPLOG = sim.log
 
 ##### TARGETs
+
+run_sim:
+	vsim \
+		$(TESTBENCH_NAME) \
+		$(VSIM_OPT) \
+		-do $(DOFILE) \
+		-l  sim.log \
+		$(D_TESTNAME)
+
 
 compile_tb:
 	vlog \
@@ -120,4 +137,14 @@ compile_test_pkg:
 		$(TARGET_TEST_PKG_FILES)
 
 
-
+compile_all: compile_dut compile_dv compile_tb
+compile_dut: compile_interface compile_dut
+compile_dv: compile_image_pipe_pkg \
+			compile_reg_cpu_pkg \
+			compile_reset_pkg \
+			compile_sequence_pkg \
+			compile_dut_reg/_pkg \
+			compile_dut_env_pkg \
+			compile_test_pkg
+clean:
+	vdel -all

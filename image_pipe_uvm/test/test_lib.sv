@@ -1,9 +1,7 @@
 `ifndef __TEST_LIB__
 `define __TEST_LIB__
 
-// `include "test_common.svh"
-// `include "../dv/dut_env/dut_env.sv"
-
+`include "test_common.svh"
 
 
 class base_test extends uvm_test;
@@ -28,12 +26,12 @@ class base_test extends uvm_test;
         env = dut_env::type_id::create("env", this);
         env.reg_block = reg_block;
 
-        printer = new( );
+        printer = new();
         printer.knobs.depth = 5;
     endfunction: build_phase
 
     virtual function void end_of_elaboration_phase(uvm_phase phase);
-        `uvm_info(get_type_name( ), $sformatf("Printing the test topology :\n%s", this.sprint(printer)), UVM_LOW)
+        `uvm_info(get_type_name(), $sformatf("Printing the test topology :\n%s", this.sprint(printer)), UVM_LOW)
     endfunction: end_of_elaboration_phase
 
     virtual task run_phase(uvm_phase phase);

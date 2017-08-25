@@ -2,8 +2,7 @@
 `define __IMAGE_PIPE_DRIVER__
 
 
-`include "image_pipe_define.svh"
-`include "image_pipe_data.sv"
+`include "image_pipe_common.svh"
 
 
 class image_pipe_driver #(int DW_IN, int DW_OUT)
@@ -13,6 +12,7 @@ class image_pipe_driver #(int DW_IN, int DW_OUT)
     virtual image_pipe_if #(.DW_IN(DW_IN), .DW_OUT(DW_OUT)) vif;
 
     `uvm_component_param_utils(image_pipe_driver#(DW_IN, DW_OUT))
+
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -37,7 +37,6 @@ class image_pipe_driver #(int DW_IN, int DW_OUT)
             wait(vif.rst_n==`IMAGE_PIPE_RESET_ACTIVE);
             `uvm_info(get_type_name(), "DO_RESET", UVM_LOW)
             while (vif.rst_n==`IMAGE_PIPE_RESET_ACTIVE) begin
-                `uvm_info(get_type_name( ), "Resetting signals ", UVM_LOW)
                 vif.cb_tb.image_pipe_data_in  <= '0;
                 vif.cb_tb.image_pipe_valid_in <= '0;
                 vif.cb_tb.image_pipe_end_in   <= '0;

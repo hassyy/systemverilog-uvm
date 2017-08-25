@@ -1,7 +1,7 @@
 `ifndef __IMAGE_PIPE_SEQUENCER__
     `define __IMAGE_PIPE_SEQUENCER__
 
-`include "image_pipe_data.sv"
+`include "image_pipe_common.svh"
 
 
 class image_pipe_sequencer #(int DW_IN=32, int DW_OUT=32) extends uvm_sequencer #(image_pipe_data#(DW_IN, DW_OUT));

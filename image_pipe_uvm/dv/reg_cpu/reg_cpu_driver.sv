@@ -2,10 +2,10 @@
     `define __REG_CPU_DRIVER__
 
 `include "reg_cpu_common.svh"
-`include "reg_cpu_data.sv"
+
 
 // FYI) uvm_driver #(REQ, RESP=REQ)
-class reg_cpu_driver#(int DW, int AW) extends uvm_driver #(reg_cpu_data#(DW, AW));
+class reg_cpu_driver#(int AW, int DW) extends uvm_driver #(reg_cpu_data#(AW, DW));
 
     `uvm_component_param_utils(reg_cpu_driver#(AW, DW))
 
@@ -74,8 +74,8 @@ class reg_cpu_driver#(int DW, int AW) extends uvm_driver #(reg_cpu_data#(DW, AW)
 
         // Decode cmd_type
         case (req.reg_cpu_cmd)
-            reg_cpu_data#()::WRITE: write();
-            reg_cpu_data#()::READ:  read();
+            reg_cpu_data#(AW, DW)::WRITE: write();
+            reg_cpu_data#(AW, DW)::READ:  read();
         endcase
 
         repeat(req.cmd_interval) @(posedge vif.cb_tb);

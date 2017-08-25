@@ -1,8 +1,7 @@
 `ifndef __IMAGE_PIPE_BUSY_DRIVER__
     `define __IMAGE_PIPE_BUSY_DRIVER__
 
-`include "image_pipe_define.svh"
-`include "image_pipe_data.sv"
+`include "image_pipe_common.svh"
 
 
 class image_pipe_busy_driver#(int DW_IN, int DW_OUT) extends uvm_driver #(image_pipe_data #(DW_IN, DW_OUT));
