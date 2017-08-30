@@ -10,7 +10,8 @@ class reg_cpu_driver#(int AW, int DW) extends uvm_driver #(reg_cpu_data#(AW, DW)
     `uvm_component_param_utils(reg_cpu_driver#(AW, DW))
 
     // Declare vif to drive signals
-    virtual reg_cpu_if vif;
+    virtual reg_cpu_if#(.AW(AW), .DW(DW)) vif;
+    string reg_cpu_if_name;
 
 
     // Mandatory
@@ -22,8 +23,17 @@ class reg_cpu_driver#(int AW, int DW) extends uvm_driver #(reg_cpu_data#(AW, DW)
     // Mandatory
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        if (!uvm_config_db#(virtual reg_cpu_if)::get(this, "", "mst_intf", vif))
-            `uvm_fatal("NOVIF", {get_full_name(), ".vif"})
+
+        // Register mst_if_name in config_db as string
+        if (!uvm_config_db#(string)::get(this, "", "reg_cpu_if_name", reg_cpu_if_name))
+            `uvm_fatal("NO_IF_NAME", {"Need interface name for: ", get_full_name( ), ".reg_cpu_if_name"})
+
+        uvm_report_info("", $sformatf("INTERFACE NAME: %0s", reg_cpu_if_name), UVM_LOW);
+        print_config();
+
+        // Register reg_cpu_if specified by mst_if_name in config_db
+        if (!uvm_config_db#(virtual reg_cpu_if#(.AW(AW), .DW(DW)))::get(this, "", reg_cpu_if_name, vif))
+            `uvm_fatal("NO_VIF", {get_full_name(), ".vif"})
     endfunction: build_phase
 
 

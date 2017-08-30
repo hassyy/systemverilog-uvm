@@ -78,10 +78,14 @@ module tb;
             // Also, you must set the generic parameter to virtual interface to have the same param.
             // Or, you'll have Illegal assingment error.
             //   "interface must be assigned a matching interface or virtual interface."
-            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_OUT)))::set(uvm_root::get(), "*.agent.*", "in_intf", vif_in);
+            uvm_config_db#( virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_OUT))
+                            )::set( uvm_root::get()
+                                    , "*.agent.*"   // Search path of hierachy in config_db
+                                    , "in_intf"     // Target string of interaface to be searched
+                                    , vif_in        // Set this to the searched interface
+                                    );
             uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_OUT)))::set(uvm_root::get(), "*.agent.*", "out_intf", vif_out);
-            uvm_config_db#(virtual image_pipe_if#(.DW_IN(DW_IN), .DW_OUT(DW_OUT)))::set(uvm_root::get(), "*.monitor", "monitor_intf", vif_out);
-            uvm_config_db#(virtual reg_cpu_if#(.AW(AW), .DW(DW)))::set(uvm_root::get(), "*.agent.*", "mst_intf", reg_if);
+            uvm_config_db#(virtual reg_cpu_if#(.AW(AW), .DW(DW)))::set(uvm_root::get(), "*.agent.*", "reg_cpu_if", reg_if);
             uvm_config_db#(virtual reset_if)::set(uvm_root::get(), "*.rst_agent.*", "reset_if", reset_if);
 
             // UVM start test.

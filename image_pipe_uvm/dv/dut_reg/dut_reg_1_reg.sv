@@ -31,6 +31,12 @@ class dut_reg_1_reg extends uvm_reg;
                                 );
     endfunction: build
 
+    // For backdoor
+    add_hdl_path_slice( .name( "reg_1_field_1" )
+                        , .offset( 0 )    // start bit as lsb_pos
+                        , .size( 2 )      // bit size as size
+                        );
+
 endclass: dut_reg_1_reg
 
 `endif

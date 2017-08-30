@@ -52,6 +52,12 @@ class reg_cpu_data #(int AW, int DW) extends uvm_sequence_item;
         `uvm_field_int(cmd_interval, UVM_DEFAULT)
     `uvm_object_utils_end
 
+
+    function new(string name="reg_cpu_data");
+        super.new(name);
+    endfunction: new
+
+
 endclass: reg_cpu_data
 
 `endif

@@ -4,14 +4,20 @@
 
 `include "reg_cpu_common.svh"
 
+`ifndef _IF_NAME
+`define _IF_NAME reg_cpu_if_name
+`endif
+`ifndef _TO_STRING
+`define _TO_STRING(x) `"x`"
+`endif
 
 class reg_cpu_monitor #(int AW, int DW) extends uvm_monitor;
 
     virtual reg_cpu_if #(.AW(AW), .DW(DW)) vif;
-    string monitor_intf;
+    string `_IF_NAME;
     //int num_collected_data;
 
-    // This will be connected to scoreboard
+
     uvm_analysis_port #(reg_cpu_data#(AW, DW)) ap;
     reg_cpu_data #(AW, DW) data_collected;
     reg_cpu_data #(AW, DW) data_clone;
@@ -27,13 +33,13 @@ class reg_cpu_monitor #(int AW, int DW) extends uvm_monitor;
         super.build_phase(phase);
 
         // This string is used to identify the vif set later.
-        if (!uvm_config_db#(string)::get(this, "", "monitor_intf", monitor_intf))
-            `uvm_fatal("NOSTRING", {"Need interface name for: ", get_full_name( ), ".monitor_intf"})
+        if (!uvm_config_db#(string)::get(this, "", `_TO_STRING(`_IF_NAME), `_IF_NAME))
+            `uvm_fatal("NOSTRING", {"Need interface name for: ", get_full_name( ), `_TO_STRING(.`_IF_NAME)})
 
-        `uvm_info(get_type_name( ), $sformatf("INTERFACE USED = %0s", monitor_intf), UVM_LOW)
+        uvm_report_info("", $sformatf("INTERFACE NAME: %0s", `_IF_NAME), UVM_LOW);
 
         // This set the vif with the string previously set.
-        if (!uvm_config_db#(virtual reg_cpu_if#(.AW(AW), .DW(DW)))::get(this, "", monitor_intf, vif))
+        if (!uvm_config_db#(virtual reg_cpu_if#(.AW(AW), .DW(DW)))::get(this, "", `_IF_NAME, vif))
             `uvm_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name( ), ".vif"})
 
         // We need to instantiate analysys_port by new. It cannot be registerd to UVM Factory.
@@ -56,7 +62,11 @@ class reg_cpu_monitor #(int AW, int DW) extends uvm_monitor;
             // We must use clocking block for monitor to have proper data collect timing.
 
             wait(vif.cb_mon.reg_cpu_cs);
-            data_collected.reg_cpu_addr    = vif.cb_mon.reg_cpu_addr;
+            data_collected.reg_cpu_addr = vif.cb_mon.reg_cpu_addr;
+            data_collected.reg_cpu_we   = vif.cb_mon.reg_cpu_cs;
+            data_collected.reg_cpu_we   = vif.cb_mon.reg_cpu_we;
+            data_collected.reg_cpu_re   = vif.cb_mon.reg_cpu_re;
+
             if (vif.cb_mon.reg_cpu_we) begin
                 data_collected.reg_cpu_data_wr = vif.cb_mon.reg_cpu_data_wr;
                 wait(vif.cb_mon.reg_cpu_wack);
@@ -67,11 +77,13 @@ class reg_cpu_monitor #(int AW, int DW) extends uvm_monitor;
                 data_collected.reg_cpu_data_rd = vif.cb_mon.reg_cpu_data_rd;
             end
 
+            data_collected.reg_cpu_wack = vif.cb_mon.reg_cpu_wack;
+            data_collected.reg_cpu_rdv  = vif.cb_mon.reg_cpu_rdv;
+
             // We must clone the data to send it to analysis port.
             $cast(data_clone, data_collected.clone( ));
-
-            // Send the collected data on analisys port (to scoreboard)
             ap.write(data_clone);
+
             //num_collected_data++;
             @(posedge vif.cb_mon);
         end
@@ -89,5 +101,12 @@ class reg_cpu_monitor #(int AW, int DW) extends uvm_monitor;
 
 
 endclass : reg_cpu_monitor
+
+`ifdef _IF_NAME
+`undef _IF_NAME
+`endif
+`ifdef _TO_STRING
+`undef _TO_STRING
+`endif
 
 `endif

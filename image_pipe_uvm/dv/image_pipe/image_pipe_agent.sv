@@ -22,11 +22,14 @@ class image_pipe_agent #(int DW_IN, int DW_OUT) extends uvm_agent;
     // Monitor is used in both MASTER/SLAVE side (No flag)
     image_pipe_monitor#(DW_IN, DW_OUT) monitor;
 
+    `uvm_component_param_utils(image_pipe_agent#(DW_IN, DW_OUT))
     // This MACRO will let flags be used vie config_db.
-    `uvm_component_param_utils_begin(image_pipe_agent#(DW_IN, DW_OUT))
-        `uvm_field_enum(uvm_active_passive_enum, is_active, UVM_ALL_ON)
-        `uvm_field_enum(uvm_active_passive_enum, image_pipe_busy_active, UVM_ALL_ON)
-    `uvm_component_utils_end
+    // `uvm_component_param_utils_begin(image_pipe_agent#(DW_IN, DW_OUT))
+        // `uvm_field_enum(uvm_active_passive_enum, is_active, UVM_ALL_ON)
+        // `uvm_field_enum(uvm_active_passive_enum, image_pipe_busy_active, UVM_ALL_ON)
+       // uvm_active_passive_enum is_active = UVM_ACTIVE;
+       // uvm_active_passive_enum image_pipe_busy_active = UVM_PASSIVE;
+    // `uvm_component_utils_end
 
 
     // Mandatory.

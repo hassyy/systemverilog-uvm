@@ -21,6 +21,10 @@ class image_pipe_data_random_timing#(int DW_IN=`TEST_IMAGE_PIPE_DW_IN, int DW_OU
         busy_negate_cycle inside {[1:5]};
     }
 
+    function new(string name="image_pipe_data_random_timing");
+        super.new(name);
+    endfunction: new
+
     // Override displayAll()
     virtual task displayAll();
     `uvm_info("DP", $sformatf("wait_before_transmit=%0d"

@@ -54,6 +54,8 @@ TARGET_TB_FILES = $(TARGET_TB_DIR)/tb.sv \
 
 ##### VLOG
 
+#UVM_HOME = C:\\questasim64_10.6a\\verilog_src\\uvm-1.2\\src\\
+#+incdir+$(UVM_HOME)
 VLOG_SUPPRESS_OPT = -suppress 2643 -suppress 2269
 VLOG_OPT = -incr -sv $(VLOG_SUPPRESS_OPT)
 
@@ -61,7 +63,8 @@ VLOG_OPT = -incr -sv $(VLOG_SUPPRESS_OPT)
 
 VSIM_OPT = -c -classdebug -uvmcontrol=all -voptargs="+acc"
 TESTBENCH_NAME = tb
-D_TESTNAME = +UVM_TESTNAME=image_pipe_primary_test
+TESTNAME = image_pipe_primary_test
+UVM_TESTNAME = +UVM_TESTNAME=$(TESTNAME)
 DOFILE = "add wave -position insertpoint sim:/tb/image_pipe_top/* ; run -all; q"
 DUMPLOG = sim.log
 
@@ -73,7 +76,7 @@ run_sim:
 		$(VSIM_OPT) \
 		-do $(DOFILE) \
 		-l  sim.log \
-		$(D_TESTNAME)
+		$(UVM_TESTNAME)
 
 
 compile_tb:
@@ -142,8 +145,8 @@ compile_dut: compile_interface compile_dut
 compile_dv: compile_image_pipe_pkg \
 			compile_reg_cpu_pkg \
 			compile_reset_pkg \
+			compile_dut_reg_pkg \
 			compile_sequence_pkg \
-			compile_dut_reg/_pkg \
 			compile_dut_env_pkg \
 			compile_test_pkg
 clean:

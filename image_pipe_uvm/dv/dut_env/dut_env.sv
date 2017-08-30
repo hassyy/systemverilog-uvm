@@ -43,8 +43,13 @@ class dut_env extends uvm_env;
         uvm_config_db#(int)::set(this, "ip_env_out.agent", "is_active", UVM_PASSIVE);
         uvm_config_db#(int)::set(this, "ip_env_out.agent", "image_pipe_busy_active", UVM_ACTIVE);
 
+        //   image_pipe_env
         uvm_config_db#(string)::set(this, "ip_env_in.agent.monitor", "monitor_intf", "in_intf");
         uvm_config_db#(string)::set(this, "ip_env_out.agent.monitor", "monitor_intf", "out_intf");
+
+        //   reg_cpu_env
+        uvm_config_db#(string)::set(this, "reg_env.agent.driver", "reg_cpu_if_name", "reg_cpu_if");
+        uvm_config_db#(string)::set(this, "reg_env.agent.monitor", "reg_cpu_if_name", "reg_cpu_if");
 
         // Instantiation
         rst_agent = reset_agent::type_id::create("rst_agent", this);
@@ -63,12 +68,13 @@ class dut_env extends uvm_env;
 
     function void connect_phase(uvm_phase phase);
 
-        // Connect scoreboard and monitors via
+        // Connect scoreboard and monitors directly
         ip_env_in.agent.monitor.ap.connect(sb.in_data_af.analysis_export);
         ip_env_out.agent.monitor.ap.connect(sb.out_data_af.analysis_export);
 
-        // For register abstruction
-        if (reg_block.get_parent()==null)
+
+        // Connect reg
+        if (reg_block.get_parent()==null)           // if top-level
             reg_block.reg_map.set_sequencer(
                 .sequencer(reg_env.agent.sequencer),
                 .adapter(reg_env.agent.adapter)
@@ -76,13 +82,14 @@ class dut_env extends uvm_env;
 
         reg_env.reg_predictor.map = reg_block.reg_map;
         reg_env.reg_predictor.adapter = reg_env.agent.adapter;
+        reg_env.agent.monitor.ap.connect(reg_env.reg_predictor.bus_in);
 
         // Connect virtual sequencer to non-virtual sequencer.
         // If not, you'll have NULL_POINTER_EXCEPTION...osz
         v_seqr.image_pipe_seqr      = ip_env_in.agent.sequencer;
         v_seqr.image_pipe_busy_seqr = ip_env_out.agent.busy_sequencer;
-        v_seqr.reg_cpu_seqr         = reg_env.agent.sequencer;
-        v_seqr.reset_seqr           = rst_agent.sequencer;
+        v_seqr.reg_cpu_seqr        = reg_env.agent.sequencer;
+        v_seqr.reset_seqr    = rst_agent.sequencer;
 
         `uvm_info(get_full_name( ), "CONNECT_PHASE done.", UVM_LOW)
     endfunction: connect_phase

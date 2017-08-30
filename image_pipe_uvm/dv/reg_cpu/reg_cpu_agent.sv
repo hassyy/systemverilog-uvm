@@ -24,8 +24,9 @@ class reg_cpu_agent#(int AW, int DW) extends uvm_agent;
 
 
         sequencer = reg_cpu_sequencer#(DW, DW)::type_id::create(.name("sequencer"), .parent(this));
-        driver = reg_cpu_monitor#(AW, DW)::type_id::create(.name("monitor"), .parent(this));
-        monitor = reg_cpu_driver#(AW, DW)::type_id::create(.name("driver"), .parent(this));
+        driver = reg_cpu_driver#(AW, DW)::type_id::create(.name("driver"), .parent(this));
+        monitor = reg_cpu_monitor#(AW, DW)::type_id::create(.name("monitor"), .parent(this));
+        sb = reg_cpu_scoreboard#(AW, DW)::type_id::create(.name("sb"), .parent(this));
         adapter = reg_cpu_reg_adapter#(AW, DW)::type_id::create(.name("adapter"), .parent(this));
 
         `uvm_info(get_full_name(), "BUILD_PHASE done", UVM_LOW)
@@ -35,7 +36,7 @@ class reg_cpu_agent#(int AW, int DW) extends uvm_agent;
         driver.seq_item_port.connect(sequencer.seq_item_export);
 
         // Connect scoreboard and monitors
-        monitor.ap.connect(sb.af.analysis_export);
+        monitor.ap.connect(sb.actual_data_af.analysis_export);
 
         `uvm_info(get_full_name(), "CONNECT_PHASE done", UVM_LOW)
     endfunction: connect_phase

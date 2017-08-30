@@ -15,6 +15,7 @@ package test_pkg;
 
     `include "test_lib.sv"
     `include "image_pipe_primary_test.sv"
+    `include "dut_reg_test.sv"
 
 endpackage
 
